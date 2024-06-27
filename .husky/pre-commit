@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo '🏗️👷 Styling, testing and building your project before committing'
+
+# Check Prettier standards
+pnpm run prettier:check ||
+(
+    echo 'Prettier Check Failed. Run pnpm format, add changes and try commit again.';
+    false;
+)
+
+# Check ESLint Standards
+pnpm lint-staged ||
+(
+    echo 'ESLint Check Failed. Make the required changes listed above, add changes and try to commit again.'
+    false; 
+)
+
+# Check tsconfig standards
+pnpm run check-types ||
+(
+    echo 'Failed Type check. Make the changes required above.'
+    false;
+)
+
+# If everything passes... Now we can build
+echo 'Code pass the test. Trying to build now.'
+
+pnpm run build ||
+(
+    echo 'Build failed: View the errors above to see why.'
+    false;
+)
+
+# If everything passes... Now we can commit
+echo '✅✅✅✅ All test passed. Committing changes. ✅✅✅✅'
