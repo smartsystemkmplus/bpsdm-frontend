@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import apiService from '@services/api';
+import { BASE_PROXY } from '@services/api/endpoint';
 import {
   InfiniteData,
   useInfiniteQuery,
@@ -13,15 +14,39 @@ import baseURL from '@utils/baseURL';
 import showErrorDialog from '@utils/showErrorDialog';
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
+export interface StrapiPagination {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
+}
+export interface StrapiMeta {
+  pagination?: StrapiPagination;
+}
+export interface StrapiData<T> {
+  id: number;
+  attributes: T;
+}
+
+export interface StrapiError {
+  data: null;
+  error: {
+    status: number;
+    name: string;
+    message: string;
+    details: Record<string, unknown>;
+  };
+}
 export interface GenericQueryResponse<T> {
   data: T;
   status?: string;
   success?: boolean;
-  message?: 'string';
+  message?: string;
   code?: number;
+  meta?: StrapiMeta;
 }
 
-interface GenericAPIErrorData {
+interface GenericAPIErrorData extends StrapiError {
   message?: string;
 }
 
@@ -113,8 +138,13 @@ export default function useNetworks(service: string) {
     axiosConfigs: AxiosRequestConfig = {}
   ) =>
     useInfiniteQuery<T, AxiosError, TSelect>({
-      queryFn: async ({ pageParam = 1 }) =>
-        apiService
+      queryFn: async ({ pageParam = 1 }) => {
+        const paginationParam =
+          service === BASE_PROXY.strapi
+            ? { 'pagination[page]': pageParam }
+            : { page: pageParam };
+
+        return apiService
           .request<AxiosResponse>(
             serviceBaseURL,
             'get',
@@ -122,7 +152,7 @@ export default function useNetworks(service: string) {
             undefined,
             {
               ...axiosConfigs,
-              params: { ...axiosConfigs.params, page: pageParam },
+              params: { ...axiosConfigs.params, ...paginationParam },
             }
           )
           .then((result) => {
@@ -136,7 +166,8 @@ export default function useNetworks(service: string) {
               showErrorDialog(err);
             }
             return err;
-          }),
+          });
+      },
       ...options,
     });
 

@@ -26,26 +26,29 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       proxy: {
-        '/api/employees/v1': {
+        '/api/employees': {
           target: process.env.VITE_API_EMPLOYEES_SERVICE_URL,
           changeOrigin: true,
           secure: false,
-          rewrite: (path) =>
-            path.replace(/^\/api\/employees\/v1/, ''),
+          rewrite: (path) => path.replace(/^\/api\/employees/, ''),
         },
-        '/api/innovation/v1': {
+        '/api/innovation': {
           target: process.env.VITE_API_INNOVATION_SERVICE_URL,
           changeOrigin: true,
           secure: false,
-          rewrite: (path) =>
-            path.replace(/^\/api\/innovation\/v1/, ''),
+          rewrite: (path) => path.replace(/^\/api\/innovation/, ''),
         },
-        '/api/repository/v1': {
+        '/api/repository': {
           target: process.env.VITE_API_REPOSITORY_SERVICE_URL,
           changeOrigin: true,
           secure: false,
-          rewrite: (path) =>
-            path.replace(/^\/api\/repository\/v1/, ''),
+          rewrite: (path) => path.replace(/^\/api\/repository/, ''),
+        },
+        '/api/strapi': {
+          target: process.env.VITE_API_STRAPI_SERVICE_URL,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/api\/strapi/, ''),
         },
       },
     },

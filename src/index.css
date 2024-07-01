@@ -39,6 +39,16 @@ body {
   color: #444;
 }
 
+ol {
+  padding-left: 1.25rem;
+  list-style-type: decimal;
+}
+
+ul {
+  padding-left: 1.25rem;
+  list-style-type: disc;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

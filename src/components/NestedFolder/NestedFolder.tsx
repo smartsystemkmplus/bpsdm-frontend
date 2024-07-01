@@ -7,7 +7,7 @@ export interface NestedFolderItem {
   activeValue?: string;
   value: string;
   title: string;
-  child?: NestedFolderItem[];
+  child?: Omit<NestedFolderItem, 'child'>[];
 }
 interface ItemRendererProps extends NestedFolderItem {
   onChange?: (newValue: string) => void;
@@ -68,6 +68,9 @@ function ItemRenderer({
         icon={renderIcon()}
         onClickCapture={handleChange}
         classNames={{
+          control: isActive
+            ? 'bg-primary-surface/50 hover:bg-primary-surface/50'
+            : 'hover:bg-base-highlight',
           icon: 'self-start mt-[0.75rem]',
           chevron: 'self-start mt-[0.85rem]',
         }}
@@ -79,10 +82,9 @@ function ItemRenderer({
           <ItemRenderer
             key={c.value}
             onChange={onChange}
-            activeValue={value}
+            activeValue={activeValue}
             value={c.value}
             title={c.title}
-            child={c.child}
           />
         ))}
       </Accordion.Panel>
