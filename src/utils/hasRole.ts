@@ -9,7 +9,7 @@ const hasRole = (roles: string[] = []): boolean => {
   const user = getUserCookie();
   if (!user) return false;
 
-  const userRoles = user.role_code as string[];
+  const userRoles = user?.role_code as string[];
   return userRoles.some((role) => {
     return roles.includes(role);
   });

@@ -1,4 +1,5 @@
 import AuthLayout from '@components/Layouts/AuthLayout';
+import axiosMainClient from '@configs/axios';
 import { Icon } from '@iconify/react';
 import {
   Button,
@@ -7,6 +8,9 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import { AUTH_ENDPOINT, BASE_PROXY } from '@services/api/endpoint';
+import baseURL from '@utils/baseURL';
+import { login } from '@utils/firebaseAuth';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -20,7 +24,7 @@ export function OnToggleVisibility({ reveal }: { reveal: boolean }) {
 }
 
 export default function Login() {
-  const isLoading = false;
+  const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState('');
 
   const form = useForm({
@@ -39,14 +43,51 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = form.onSubmit(() => {
+  const handleSubmit = form.onSubmit((values) => {
     setFetchError('');
-    navigate('/home');
+    setIsLoading(true);
 
     // Accommodate super login
-    // const [userEmail, targetUID] = values.email.split('-$$-');
+    const isNotEmail = !z.string().email().safeParse(values.email)
+      .success;
+    const nrkEmail = `${values.email}-bpsdm@gmail.com`;
 
-    // TODO: Hit login EP
+    const [userEmail, targetUID] = isNotEmail
+      ? [nrkEmail, null]
+      : values.email.split('-$$-');
+
+    login(userEmail.toLowerCase().trim(), values.password)
+      .then(async (userCredential) => {
+        const { user } = userCredential;
+        const data = {
+          isRemember: values.is_remember,
+          targetUID,
+        };
+        const token = await user.getIdToken();
+        axiosMainClient(baseURL(BASE_PROXY.auth))
+          .post(AUTH_ENDPOINT.POST.login, data, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then(() => {
+            navigate('/home');
+          })
+          .catch((err) => {
+            if (err.name === 'FirebaseError') {
+              setFetchError('Email or Password is incorrect');
+            } else {
+              setFetchError('Something went wrong');
+            }
+            setIsLoading(false);
+          });
+      })
+      .catch((err) => {
+        if (err.name === 'FirebaseError') {
+          setFetchError('Email or Password is incorrect');
+        } else {
+          setFetchError('Something went wrong');
+        }
+        setIsLoading(false);
+      });
   });
 
   return (

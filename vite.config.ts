@@ -26,6 +26,12 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       proxy: {
+        '/api/auth': {
+          target: process.env.VITE_API_AUTH_SERVICE_URL,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/api\/auth/, ''),
+        },
         '/api/employees': {
           target: process.env.VITE_API_EMPLOYEES_SERVICE_URL,
           changeOrigin: true,

@@ -1,6 +1,7 @@
 type ParamID = string | number;
 
 export const BASE_PROXY = {
+  auth: '/api/auth',
   employees: '/api/employees',
   innovation: '/api/innovation',
   repository: '/api/repository',
@@ -69,5 +70,12 @@ export const STRAPI_ENDPOINT = {
     landingPage: '/api/landing-page',
     blogs: '/api/blogs',
     folders: '/api/categories',
+  },
+};
+
+export const AUTH_ENDPOINT = {
+  POST: {
+    login: '/auth/after-login',
+    logout: '/auth/logout',
   },
 };

@@ -16,6 +16,6 @@ export default function useIsAuthenticated(): boolean {
 
   return (
     // validatedUser.success &&
-    userCookie.expire_token >= Number(new Date()) / 1000
+    (userCookie?.expire_token || 0) >= Number(new Date()) / 1000
   );
 }
