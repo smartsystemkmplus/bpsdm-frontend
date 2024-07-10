@@ -21,6 +21,7 @@ import {
 
 import './index.css';
 
+import AuthRoute from './AuthRoute';
 import NotFoundPage from './pages/NotFoundPage';
 
 dayjs.extend(relativeTime);
@@ -37,16 +38,21 @@ const router = createBrowserRouter([
         element: <Navigate to="/home" />,
       },
       {
-        path: '/login',
-        element: <Login />,
-      },
-      {
-        path: '/forgot-password',
-        element: <ForgotPassword />,
-      },
-      {
-        path: '/check-email',
-        element: <CheckEmail />,
+        element: <AuthRoute />,
+        children: [
+          {
+            path: '/login',
+            element: <Login />,
+          },
+          {
+            path: '/forgot-password',
+            element: <ForgotPassword />,
+          },
+          {
+            path: '/check-email',
+            element: <CheckEmail />,
+          },
+        ],
       },
       {
         path: '/home',

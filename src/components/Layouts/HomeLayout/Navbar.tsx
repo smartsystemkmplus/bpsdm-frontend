@@ -1,5 +1,6 @@
 import ProfilePicture from '@components/ProfilePicture';
 import color from '@constants/color';
+import useIsAuthenticated from '@hooks/useIsAuthenticated';
 import useNetworks from '@hooks/useNetworks';
 import { Icon } from '@iconify/react';
 import { Button, Group, Loader, Menu, Stack } from '@mantine/core';
@@ -9,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const user = getUserCookie();
-  const isAuthenticated = !!user;
+  const isAuthenticated = useIsAuthenticated();
 
   const authService = useNetworks(BASE_PROXY.auth);
   const { mutate, isPending } = authService.mutation('post', {
@@ -47,6 +48,14 @@ export default function Navbar() {
         >
           Berita KM
         </Link>
+        {isAuthenticated && (
+          <a
+            href={`${import.meta.env.VITE_KMS_URL}`}
+            className="font-semibold text-secondary-pressed"
+          >
+            KMS
+          </a>
+        )}
       </div>
 
       {isAuthenticated ? (

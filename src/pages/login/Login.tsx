@@ -94,11 +94,13 @@ export default function Login() {
     <AuthLayout>
       <div className="flex w-full flex-col gap-16">
         <div className="flex flex-col items-start gap-2">
-          <img
-            src="/BPSDMLogo.webp"
-            alt="company_logo"
-            className="h-[60px] object-contain"
-          />
+          <Link to="/home">
+            <img
+              src="/BPSDMLogo.webp"
+              alt="company_logo"
+              className="h-[60px] object-contain"
+            />
+          </Link>
         </div>
 
         <div className="flex flex-col items-center justify-center">
