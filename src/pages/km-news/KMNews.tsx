@@ -14,7 +14,8 @@ import { Grid, Loader, Skeleton, Stack } from '@mantine/core';
 import { BlogAttribute, BlogListData } from '@pages/home/index.types';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import strapiBaseURL from '@utils/strapiBaseURL';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { FolderAttribute } from './index.types';
 
@@ -36,8 +37,19 @@ function BlogsSkeleton() {
 
 const PAGE_SIZE = 9;
 export default function KMNews() {
-  const [activeFolder, setActiveFolder] = useState('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paramFolderId = searchParams.get('f');
+  const [activeFolder, setActiveFolder] = useState(
+    paramFolderId || 'all'
+  );
   const [totalData, setTotalData] = useState(0);
+
+  // * Update URL Search Param on folder change
+  useEffect(() => {
+    searchParams.set('f', activeFolder as string);
+    setSearchParams([...searchParams.entries()], { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFolder]);
 
   const blogFilterParam = useMemo(() => {
     if (activeFolder === 'all') return {};

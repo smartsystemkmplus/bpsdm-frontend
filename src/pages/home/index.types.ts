@@ -1,4 +1,5 @@
 import { StrapiData, StrapiPagination } from '@hooks/useNetworks';
+import { Folder } from '@pages/km-news/index.types';
 import { BlocksContent } from '@strapi/blocks-react-renderer';
 
 type Format = string | 'large' | 'small' | 'medium' | 'thumbnail';
@@ -78,6 +79,7 @@ export interface BlogListData {
 export interface LandingAttribute {
   banner: Media;
   highlightedBlog: Blog;
+  highlightedFolder: Folder;
   /** Formatted in ISO String */
   createdAt: string;
   /** Formatted in ISO String */

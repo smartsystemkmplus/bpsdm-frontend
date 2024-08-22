@@ -12,3 +12,7 @@ export interface FolderAttribute {
   /** Formatted in ISO String */
   updatedAt: string;
 }
+
+export interface Folder {
+  data: StrapiData<FolderAttribute>[];
+}

@@ -61,19 +61,41 @@ function HighlightBlog({
 }
 
 interface ProgramItemProps {
+  id: number;
   title: string;
   imageUrl?: string;
+  loading?: boolean;
 }
-function ProgramItem({ title, imageUrl }: ProgramItemProps) {
+function ProgramItem({
+  id,
+  title,
+  imageUrl,
+  loading,
+}: ProgramItemProps) {
+  const href = `/km-news?f=${id}`;
   return (
     <Stack align="center">
-      <ProfilePicture
-        alt="title"
-        imageUrl={imageUrl}
-        name={title}
-        size={200}
-      />
-      <p className="font-bold">{title}</p>
+      {loading ? (
+        <Skeleton w={200} h={200} radius={100} />
+      ) : (
+        <Link to={href}>
+          <ProfilePicture
+            alt={title}
+            imageUrl={imageUrl}
+            name={title}
+            size={200}
+          />
+        </Link>
+      )}
+      {loading ? (
+        <Skeleton w={200} h={16} mb={9} />
+      ) : (
+        <Link to={href}>
+          <p className="font-bold hover:text-primary-main hover:underline">
+            {title}
+          </p>
+        </Link>
+      )}
     </Stack>
   );
 }
@@ -109,6 +131,16 @@ export default function Home() {
   const dataBanner = useMemo(() => {
     if (dataLanding) {
       return dataLanding.banner.data.attributes;
+    }
+    return null;
+  }, [dataLanding]);
+
+  const dataHighlightedFolder = useMemo(() => {
+    if (dataLanding) {
+      return dataLanding.highlightedFolder.data.map((folder) => ({
+        id: folder.id,
+        ...folder.attributes,
+      }));
     }
     return null;
   }, [dataLanding]);
@@ -214,9 +246,27 @@ export default function Home() {
             Program Knowledge Sharing
           </h2>
           <Group justify="space-evenly">
-            <ProgramItem title="Podcast Rabu Belajar" />
-            <ProgramItem title="Kopi Sedap BPKD" />
-            <ProgramItem title="Webinar Series" />
+            {!!dataHighlightedFolder?.[0] && (
+              <ProgramItem
+                id={dataHighlightedFolder[0].id}
+                title={dataHighlightedFolder[0].name}
+                loading={isLoadingLanding}
+              />
+            )}
+            {!!dataHighlightedFolder?.[1] && (
+              <ProgramItem
+                id={dataHighlightedFolder[1].id}
+                title={dataHighlightedFolder[1].name}
+                loading={isLoadingLanding}
+              />
+            )}
+            {!!dataHighlightedFolder?.[2] && (
+              <ProgramItem
+                id={dataHighlightedFolder[2].id}
+                title={dataHighlightedFolder[2].name}
+                loading={isLoadingLanding}
+              />
+            )}
           </Group>
         </section>
       </div>
