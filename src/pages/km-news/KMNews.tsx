@@ -207,9 +207,9 @@ export default function KMNews() {
                         title={blog.title}
                         content={blog.content}
                         createdAt={blog.createdAt}
-                        thumbnailUrl={strapiBaseURL(
+                        thumbnailUrl={
                           blog.thumbnail?.data?.attributes?.url
-                        )}
+                        }
                       />
                     </Grid.Col>
                   ))}

@@ -181,7 +181,7 @@ export default function Home() {
         ) : (
           <img
             alt="hero-banner"
-            src={strapiBaseURL(dataBanner?.url)}
+            src={dataBanner?.url}
             className="h-[152px] rounded-md border"
           />
         )}
@@ -193,9 +193,9 @@ export default function Home() {
             slug={dataHighlightedBlog?.slug}
             title={dataHighlightedBlog?.title}
             content={dataHighlightedBlog?.content}
-            thumbnailUrl={strapiBaseURL(
+            thumbnailUrl={
               dataHighlightedBlog?.thumbnail?.data?.attributes?.url
-            )}
+            }
           />
         )}
 
@@ -222,9 +222,7 @@ export default function Home() {
                     title={blog.title}
                     content={blog.content}
                     createdAt={blog.createdAt}
-                    thumbnailUrl={strapiBaseURL(
-                      blog.thumbnail.data.attributes.url
-                    )}
+                    thumbnailUrl={blog.thumbnail.data.attributes.url}
                   />
                 </Grid.Col>
               ))
