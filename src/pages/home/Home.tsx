@@ -12,7 +12,6 @@ import {
   BlocksRenderer,
 } from '@strapi/blocks-react-renderer';
 import shortenStrapiRTEContent from '@utils/shortenStrapiRTEContent';
-import strapiBaseURL from '@utils/strapiBaseURL';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 

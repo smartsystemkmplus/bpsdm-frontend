@@ -13,7 +13,6 @@ import useNetworks, {
 import { Grid, Loader, Skeleton, Stack } from '@mantine/core';
 import { BlogAttribute, BlogListData } from '@pages/home/index.types';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
-import strapiBaseURL from '@utils/strapiBaseURL';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 

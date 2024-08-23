@@ -11,7 +11,6 @@ import { BlogAttribute } from '@pages/home/index.types';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import getPathWithSearchParams from '@utils/getPathWithSearchParams';
-import strapiBaseURL from '@utils/strapiBaseURL';
 import { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
