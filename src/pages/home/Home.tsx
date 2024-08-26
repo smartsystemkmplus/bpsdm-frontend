@@ -181,7 +181,7 @@ export default function Home() {
           <img
             alt="hero-banner"
             src={dataBanner?.url}
-            className="h-[152px] rounded-md border"
+            className="aspect-[16/2] rounded-md border"
           />
         )}
 

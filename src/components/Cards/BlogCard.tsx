@@ -25,18 +25,18 @@ export default function BlogCard({
   return (
     <a
       href={`/km-news/${slug}`}
-      className="relative flex h-[376px] flex-col gap-3"
+      className="relative flex h-fit min-h-[376px] flex-col gap-3"
     >
       <img
         alt={slug}
         src={thumbnailUrl}
-        className="z-[2] h-[200px] w-full object-cover"
+        className="z-[2] aspect-[10/5] w-full object-cover"
         loading="lazy"
       />
       <img
         alt={slug}
         src="/placeholder.png"
-        className="absolute z-[1] h-[200px] w-full object-cover"
+        className="absolute z-[1] aspect-[10/5] w-full object-cover"
         loading="lazy"
       />
       <p className="text-sm font-semibold text-primary-main">
