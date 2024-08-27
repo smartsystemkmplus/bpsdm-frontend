@@ -122,21 +122,21 @@ export default function Home() {
 
   const dataHighlightedBlog = useMemo(() => {
     if (dataLanding) {
-      return dataLanding.highlightedBlog.data.attributes;
+      return dataLanding?.highlightedBlog?.data?.attributes;
     }
     return null;
   }, [dataLanding]);
 
   const dataBanner = useMemo(() => {
     if (dataLanding) {
-      return dataLanding.banner.data.attributes;
+      return dataLanding?.banner?.data?.attributes;
     }
     return null;
   }, [dataLanding]);
 
   const dataHighlightedFolder = useMemo(() => {
     if (dataLanding) {
-      return dataLanding.highlightedFolder.data.map((folder) => ({
+      return dataLanding?.highlightedFolder?.data?.map((folder) => ({
         id: folder.id,
         ...folder.attributes,
       }));
