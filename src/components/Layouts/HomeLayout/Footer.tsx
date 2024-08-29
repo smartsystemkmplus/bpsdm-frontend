@@ -111,7 +111,7 @@ export default function Footer() {
         <div className="flex items-end justify-between p-6">
           <div className="flex flex-col items-start gap-6">
             <img
-              src="/BPSDMLogo.webp"
+              src="/Logo_KM.png"
               alt="Logo"
               className="h-[38px] object-contain"
             />

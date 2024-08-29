@@ -30,7 +30,7 @@ export default function Navbar() {
       <div className="flex  items-center gap-4">
         <a href="/home" className="mr-2">
           <img
-            src="/BPSDMLogo.webp"
+            src="/Logo_KM.png"
             alt="Logo"
             className="aspect-auto h-[50px] p-2"
           />
