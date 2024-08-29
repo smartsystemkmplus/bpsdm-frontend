@@ -8,7 +8,11 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { AUTH_ENDPOINT, BASE_PROXY } from '@services/api/endpoint';
+import {
+  AUTH_ENDPOINT,
+  BASE_PROXY,
+  GAMIFICATION_ENDPOINT,
+} from '@services/api/endpoint';
 import baseURL from '@utils/baseURL';
 import { login } from '@utils/firebaseAuth';
 import { useState } from 'react';
@@ -69,7 +73,11 @@ export default function Login() {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then(() => {
-            navigate('/home');
+            axiosMainClient(baseURL(BASE_PROXY.gamification))
+              .post(GAMIFICATION_ENDPOINT.POST.dailyLogin, {
+                headers: { Authorization: `Bearer ${token}` },
+              })
+              .then(() => navigate('/home'));
           })
           .catch((err) => {
             if (err.name === 'FirebaseError') {
@@ -96,7 +104,7 @@ export default function Login() {
         <div className="flex flex-col items-start gap-2">
           <Link to="/home">
             <img
-              src="/BPSDMLogo.webp"
+              src="/Logo_KM.png"
               alt="company_logo"
               className="h-[60px] object-contain"
             />

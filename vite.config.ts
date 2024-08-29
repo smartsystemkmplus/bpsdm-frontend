@@ -56,6 +56,13 @@ export default defineConfig(({ mode }) => {
           secure: false,
           rewrite: (path) => path.replace(/^\/api\/strapi/, ''),
         },
+        '/api/gamification/v1': {
+          target: process.env.VITE_API_GAMIFICATION_SERVICE_URL,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) =>
+            path.replace(/^\/api\/gamification\/v1/, ''),
+        },
       },
     },
   };

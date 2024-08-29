@@ -6,6 +6,7 @@ export const BASE_PROXY = {
   innovation: '/api/innovation',
   repository: '/api/repository',
   strapi: '/api/strapi',
+  gamification: '/api/gamification/v1',
 };
 
 export const EMPLOYEES_ENDPOINT = {
@@ -77,5 +78,11 @@ export const AUTH_ENDPOINT = {
   POST: {
     login: '/auth/after-login',
     logout: '/auth/logout',
+  },
+};
+
+export const GAMIFICATION_ENDPOINT = {
+  POST: {
+    dailyLogin: '/karma/login',
   },
 };

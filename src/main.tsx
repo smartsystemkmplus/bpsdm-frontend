@@ -22,6 +22,7 @@ import {
 import './index.css';
 
 import AuthRoute from './AuthRoute';
+import DailyLogin from './DailyLogin';
 import NotFoundPage from './pages/NotFoundPage';
 
 dayjs.extend(relativeTime);
@@ -72,9 +73,10 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <DailyLogin />
+    <RouterProvider router={router} />
+  </QueryClientProvider>
+  // </React.StrictMode>
 );
