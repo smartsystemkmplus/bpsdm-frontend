@@ -69,7 +69,10 @@ export default function NewsDetail() {
           <h1 className="text-2xl font-bold">{data?.title}</h1>
           <img
             alt={`thumb-${slug}`}
-            src={data?.thumbnail?.data?.attributes?.url}
+            src={
+              data?.thumbnail_large?.data?.attributes?.url ||
+              data?.thumbnail?.data?.attributes?.url
+            }
             className="z-[2] w-full object-cover"
             loading="lazy"
           />

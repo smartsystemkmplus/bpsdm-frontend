@@ -60,6 +60,7 @@ export interface BlogAttribute {
   title: string;
   slug: string;
   thumbnail: Media;
+  thumbnail_large: Media;
   /** Formatted in ISO String */
   createdAt: string;
   /** Formatted in ISO String */

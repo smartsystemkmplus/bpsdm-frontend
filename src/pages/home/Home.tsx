@@ -196,6 +196,8 @@ export default function Home() {
             title={dataHighlightedBlog?.title}
             content={dataHighlightedBlog?.content}
             thumbnailUrl={
+              dataHighlightedBlog?.thumbnail_large?.data?.attributes
+                ?.url ||
               dataHighlightedBlog?.thumbnail?.data?.attributes?.url
             }
           />
