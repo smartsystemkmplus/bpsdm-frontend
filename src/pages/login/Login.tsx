@@ -100,86 +100,88 @@ export default function Login() {
 
   return (
     <AuthLayout>
-      <div className="flex w-full flex-col gap-16">
-        <div className="flex flex-col items-start gap-2">
-          <Link to="/home">
-            <img
-              src="/Logo_KM.png"
-              alt="company_logo"
-              className="h-[60px] object-contain"
-            />
-          </Link>
-        </div>
+      <div className="flex size-full items-center justify-center">
+        <div className="flex w-full flex-col gap-16">
+          <div className="flex flex-col items-center gap-2">
+            <Link to="/home">
+              <img
+                src="/Logo_KM.png"
+                alt="company_logo"
+                className="h-[60px] object-contain"
+              />
+            </Link>
+          </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <form
-            onSubmit={handleSubmit}
-            className="flex w-full flex-col gap-4"
-          >
-            <TextInput
-              radius="md"
-              label="Email"
-              placeholder="Masukan email"
-              size="md"
-              name="email"
-              classNames={{
-                root: 'w-full',
-                label: 'mb-2',
-              }}
-              {...form.getInputProps('email')}
-            />
-
-            <div>
-              <PasswordInput
+          <div className="flex flex-col items-center justify-center">
+            <form
+              onSubmit={handleSubmit}
+              className="flex w-full flex-col gap-4"
+            >
+              <TextInput
                 radius="md"
-                label="Password"
-                placeholder="Masukan password"
+                label="NRK"
+                placeholder="Masukan NRK"
                 size="md"
-                name="password"
+                name="email"
                 classNames={{
                   root: 'w-full',
                   label: 'mb-2',
                 }}
-                visibilityToggleIcon={OnToggleVisibility}
-                {...form.getInputProps('password')}
+                {...form.getInputProps('email')}
               />
 
-              <p className="mt-2 text-center text-sm text-danger-main">
-                {fetchError}
-              </p>
-            </div>
+              <div>
+                <PasswordInput
+                  radius="md"
+                  label="Password"
+                  placeholder="Masukan password"
+                  size="md"
+                  name="password"
+                  classNames={{
+                    root: 'w-full',
+                    label: 'mb-2',
+                  }}
+                  visibilityToggleIcon={OnToggleVisibility}
+                  {...form.getInputProps('password')}
+                />
 
-            <div className="flex items-center justify-between">
-              <Link
-                to="/forgot-password"
-                className="text-base font-semibold text-primary-main"
-              >
-                Forgot password?
-              </Link>
-              <Checkbox
-                size="md"
-                label="Remember me"
-                classNames={{ label: 'secondary' }}
-                {...form.getInputProps('is_remember')}
+                <p className="mt-2 text-center text-sm text-danger-main">
+                  {fetchError}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Link
+                  to="/forgot-password"
+                  className="text-base font-semibold text-primary-main"
+                >
+                  Forgot password?
+                </Link>
+                <Checkbox
+                  size="md"
+                  label="Remember me"
+                  classNames={{ label: 'secondary' }}
+                  {...form.getInputProps('is_remember')}
+                />
+              </div>
+
+              <Button loading={isLoading} type="submit">
+                Sign In
+              </Button>
+            </form>
+
+            <a
+              className="mt-7 flex items-center font-semibold text-base-darkGray"
+              href="http://wa.me/+628113117698"
+            >
+              <Icon
+                icon="mingcute:service-fill"
+                className="mr-2 inline"
+                width={20}
               />
-            </div>
-
-            <Button loading={isLoading} type="submit">
-              Sign In
-            </Button>
-          </form>
-
-          <a
-            className="mt-7 flex items-center font-semibold text-base-darkGray"
-            href="http://wa.me/+628113117698"
-          >
-            <Icon
-              icon="mingcute:service-fill"
-              className="mr-2 inline"
-              width={20}
-            />
-            Helpdesk
-          </a>
+              Helpdesk
+            </a>
+          </div>
         </div>
       </div>
     </AuthLayout>
