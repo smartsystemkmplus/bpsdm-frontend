@@ -1,11 +1,12 @@
 import BlogCard from '@components/Cards/BlogCard';
 import HomeLayout from '@components/Layouts/HomeLayout';
+import NoData from '@components/NoData';
 import ProfilePicture from '@components/ProfilePicture';
 import useNetworks, {
   GenericQueryResponse,
   StrapiData,
 } from '@hooks/useNetworks';
-import { Grid, Group, Skeleton, Stack } from '@mantine/core';
+import { Grid, Group, Loader, Skeleton, Stack } from '@mantine/core';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import {
   BlocksContent,
@@ -134,12 +135,14 @@ export default function Home() {
     return null;
   }, [dataLanding]);
 
-  const dataHighlightedFolder = useMemo(() => {
+  const dataHighlightedPodcast = useMemo(() => {
     if (dataLanding) {
-      return dataLanding?.highlightedFolder?.data?.map((folder) => ({
-        id: folder.id,
-        ...folder.attributes,
-      }));
+      return dataLanding?.highlightedPodcasts?.data?.map(
+        (podcast) => ({
+          id: podcast.id,
+          ...podcast.attributes,
+        })
+      );
     }
     return null;
   }, [dataLanding]);
@@ -243,27 +246,23 @@ export default function Home() {
             Program Knowledge Sharing
           </h2>
           <Group justify="space-evenly">
-            {!!dataHighlightedFolder?.[0] && (
-              <ProgramItem
-                id={dataHighlightedFolder[0].id}
-                title={dataHighlightedFolder[0].name}
-                loading={isLoadingLanding}
-              />
-            )}
-            {!!dataHighlightedFolder?.[1] && (
-              <ProgramItem
-                id={dataHighlightedFolder[1].id}
-                title={dataHighlightedFolder[1].name}
-                loading={isLoadingLanding}
-              />
-            )}
-            {!!dataHighlightedFolder?.[2] && (
-              <ProgramItem
-                id={dataHighlightedFolder[2].id}
-                title={dataHighlightedFolder[2].name}
-                loading={isLoadingLanding}
-              />
-            )}
+            {(() => {
+              if (isLoadingLanding) {
+                return <Loader className="mx-auto" />;
+              }
+
+              if (dataHighlightedPodcast?.length) {
+                return dataHighlightedPodcast?.map((p) => (
+                  <ProgramItem
+                    id={p.id}
+                    title={p.name}
+                    imageUrl={p.thumbnail.data.attributes.url}
+                  />
+                ));
+              }
+
+              return <NoData label="Tidak ditemukan" />;
+            })()}
           </Group>
         </section>
       </div>

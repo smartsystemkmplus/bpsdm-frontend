@@ -1,5 +1,4 @@
 import { StrapiData, StrapiPagination } from '@hooks/useNetworks';
-import { Folder } from '@pages/km-news/index.types';
 import { BlocksContent } from '@strapi/blocks-react-renderer';
 
 type Format = string | 'large' | 'small' | 'medium' | 'thumbnail';
@@ -76,10 +75,19 @@ export interface BlogListData {
   pagination: StrapiPagination;
 }
 
+export interface PodcastAttribute {
+  name: string;
+  description: string;
+  thumbnail: Media;
+}
+export interface Podcast {
+  data: StrapiData<PodcastAttribute>[];
+}
+
 export interface LandingAttribute {
   banner: Media;
   highlightedBlog: Blog;
-  highlightedFolder: Folder;
+  highlightedPodcasts: Podcast;
   /** Formatted in ISO String */
   createdAt: string;
   /** Formatted in ISO String */
