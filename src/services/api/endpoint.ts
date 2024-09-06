@@ -71,6 +71,7 @@ export const STRAPI_ENDPOINT = {
     landingPage: '/api/landing-page',
     blogs: '/api/blogs',
     folders: '/api/categories',
+    podcasts: '/api/podcasts',
   },
 };
 

@@ -10,9 +10,16 @@ import useNetworks, {
   GenericQueryResponse,
   StrapiData,
 } from '@hooks/useNetworks';
-import { Grid, Loader, Skeleton, Stack } from '@mantine/core';
-import { BlogAttribute, BlogListData } from '@pages/home/index.types';
+import { Grid, Group, Loader, Skeleton, Stack } from '@mantine/core';
+import {
+  BlogAttribute,
+  BlogListData,
+  PodcastAttribute,
+  PodcastDetailData,
+} from '@pages/home/index.types';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
+import dayjs from 'dayjs';
+import { DataTable } from 'mantine-datatable';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -38,6 +45,7 @@ const PAGE_SIZE = 9;
 export default function KMNews() {
   const [searchParams, setSearchParams] = useSearchParams();
   const paramFolderId = searchParams.get('f');
+  const podcastId = searchParams.get('pod');
   const [activeFolder, setActiveFolder] = useState(
     paramFolderId || 'all'
   );
@@ -45,10 +53,12 @@ export default function KMNews() {
 
   // * Update URL Search Param on folder change
   useEffect(() => {
-    searchParams.set('f', activeFolder as string);
-    setSearchParams([...searchParams.entries()], { replace: true });
+    if (!podcastId) {
+      searchParams.set('f', activeFolder as string);
+      setSearchParams([...searchParams.entries()], { replace: true });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeFolder]);
+  }, [activeFolder, podcastId]);
 
   const blogFilterParam = useMemo(() => {
     if (activeFolder === 'all') return {};
@@ -73,6 +83,7 @@ export default function KMNews() {
         STRAPI_ENDPOINT.GET.blogs,
         {
           queryKey: ['blogs-news', PAGE_SIZE, blogFilterParam],
+          enabled: !podcastId,
           initialPageParam: 1,
           getNextPageParam: (lastPage, allPages) => {
             const maxPages =
@@ -108,6 +119,30 @@ export default function KMNews() {
         }
       )
     );
+
+  const { data: dataPodcast, isLoading: isLoadingPodcast } = query<
+    GenericQueryResponse<StrapiData<PodcastAttribute>[]>,
+    PodcastDetailData
+  >(
+    STRAPI_ENDPOINT.GET.podcasts,
+    {
+      queryKey: ['podcast', podcastId],
+      enabled: !!podcastId,
+      select: (res) => ({
+        ...res.data?.[0].attributes,
+        podcast_episodes:
+          res?.data?.[0]?.attributes?.podcast_episodes?.data?.map(
+            (item) => item.attributes
+          ),
+      }),
+    },
+    {
+      params: {
+        populate: 'deep',
+        'filters[id][$eq]': podcastId,
+      },
+    }
+  );
 
   const { data: dataFolders, isLoading: isLoadingFolders } = query<
     GenericQueryResponse<StrapiData<FolderAttribute>[]>
@@ -156,18 +191,125 @@ export default function KMNews() {
     ];
   }, [totalData, dataFolders]);
 
+  const renderKMNews = () => {
+    if (isLoading) {
+      return (
+        <Grid gutter={24}>
+          <BlogsSkeleton />
+        </Grid>
+      );
+    }
+    if (data?.blogs?.length) {
+      return (
+        <Grid gutter={24}>
+          {data?.blogs?.map((blog) => (
+            <Grid.Col key={blog.slug} span={4}>
+              <BlogCard
+                slug={blog.slug}
+                category={blog.category?.data?.attributes?.name}
+                title={blog.title}
+                content={blog.content}
+                createdAt={blog.createdAt}
+                thumbnailUrl={blog.thumbnail?.data?.attributes?.url}
+              />
+            </Grid.Col>
+          ))}
+        </Grid>
+      );
+    }
+    return <NoData label="Berita KM tidak ditemukan" />;
+  };
+
+  const renderPodcast = () => {
+    return (
+      <Stack gap="xl">
+        <Group gap="md" wrap="nowrap" align="start">
+          {isLoadingPodcast ? (
+            <Skeleton w={140} h={80} />
+          ) : (
+            <img
+              alt="logo"
+              src={dataPodcast?.thumbnail?.data?.attributes?.url}
+              className="w-[140px]"
+            />
+          )}
+
+          {isLoadingPodcast ? (
+            <Stack gap="xs" className="w-full">
+              <Skeleton h={40} w={300} />
+              <Skeleton h={150} w="100%" />
+            </Stack>
+          ) : (
+            <Stack gap="xs">
+              <p className="text-4xl font-bold">
+                {dataPodcast?.name}
+              </p>
+              <p>{dataPodcast?.description}</p>
+            </Stack>
+          )}
+        </Group>
+        <DataTable
+          records={dataPodcast?.podcast_episodes || []}
+          idAccessor="id"
+          columns={[
+            {
+              accessor: 'episode',
+              title: 'Episode',
+            },
+            {
+              accessor: 'date',
+              title: 'Tanggal',
+              render: (item) =>
+                dayjs(item.date).format('DD MMMM YYYY'),
+            },
+            {
+              accessor: 'title',
+              title: 'Judul',
+            },
+            {
+              accessor: 'url',
+              title: 'Link',
+              render: (item) => (
+                <a
+                  href={item?.url}
+                  className="text-primary-main hover:underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {item?.url?.includes('youtube')
+                    ? 'Watch on YouTube'
+                    : item?.url}
+                </a>
+              ),
+            },
+          ]}
+          totalRecords={dataPodcast?.podcast_episodes?.length}
+          recordsPerPage={dataPodcast?.podcast_episodes?.length}
+          minHeight={225}
+          noRecordsIcon={<NoData label="Episode tidak ditemukan" />}
+          noRecordsText=""
+          fetching={isLoading}
+        />
+      </Stack>
+    );
+  };
+
   return (
     <HomeLayout>
       <div className="flex flex-col gap-12">
         <Stack gap={24}>
-          <h1 className="text-4xl font-bold">Berita KM BPSDM</h1>
-          <p>
-            Menampilkan{' '}
-            <span className="font-bold text-primary-main">
-              {data?.blogs?.length || 0}
-            </span>{' '}
-            Berita
-          </p>
+          <h1 className="text-4xl font-bold">
+            {podcastId ? dataPodcast?.name : 'Berita KM BPSDM'}
+          </h1>
+          {!podcastId && (
+            <p>
+              Menampilkan{' '}
+              <span className="font-bold text-primary-main">
+                {data?.blogs?.length || 0}
+              </span>{' '}
+              Berita
+            </p>
+          )}
         </Stack>
 
         <AsideContentLayout
@@ -179,44 +321,18 @@ export default function KMNews() {
                 <NestedFolder
                   data={folders}
                   value={activeFolder}
-                  onChange={setActiveFolder}
+                  onChange={(v) => {
+                    if (podcastId) {
+                      searchParams.delete('pod');
+                    }
+                    setActiveFolder(v);
+                  }}
                 />
               </Stack>
             )
           }
         >
-          {(() => {
-            if (isLoading) {
-              return (
-                <Grid gutter={24}>
-                  <BlogsSkeleton />
-                </Grid>
-              );
-            }
-            if (data?.blogs?.length) {
-              return (
-                <Grid gutter={24}>
-                  {data?.blogs?.map((blog) => (
-                    <Grid.Col key={blog.slug} span={4}>
-                      <BlogCard
-                        slug={blog.slug}
-                        category={
-                          blog.category?.data?.attributes?.name
-                        }
-                        title={blog.title}
-                        content={blog.content}
-                        createdAt={blog.createdAt}
-                        thumbnailUrl={
-                          blog.thumbnail?.data?.attributes?.url
-                        }
-                      />
-                    </Grid.Col>
-                  ))}
-                </Grid>
-              );
-            }
-            return <NoData label="Berita KM tidak ditemukan" />;
-          })()}
+          {podcastId ? renderPodcast() : renderKMNews()}
 
           {isFetchingNextPage && (
             <Loader className="mx-auto" type="dots" />

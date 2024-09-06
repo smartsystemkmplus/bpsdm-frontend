@@ -72,7 +72,7 @@ function ProgramItem({
   imageUrl,
   loading,
 }: ProgramItemProps) {
-  const href = `/km-news?f=${id}`;
+  const href = `/km-news?pod=${id}`;
   return (
     <Stack align="center">
       {loading ? (

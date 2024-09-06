@@ -76,13 +76,32 @@ export interface BlogListData {
   pagination: StrapiPagination;
 }
 
+export interface PodcastEpisodeAttribute {
+  id?: number;
+  episode: number;
+  title: string;
+  url: string;
+  /** Date formatted in ISO String */
+  date: string;
+}
+
+export interface PodcastEpisode {
+  data: StrapiData<PodcastEpisodeAttribute>[];
+}
+
 export interface PodcastAttribute {
   name: string;
   description: string;
   thumbnail: Media;
+  podcast_episodes: PodcastEpisode;
 }
 export interface Podcast {
   data: StrapiData<PodcastAttribute>[];
+}
+
+export interface PodcastDetailData
+  extends Omit<PodcastAttribute, 'podcast_episodes'> {
+  podcast_episodes: PodcastEpisodeAttribute[];
 }
 
 export interface LandingAttribute {
