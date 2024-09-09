@@ -285,6 +285,8 @@ export default function KMNews() {
           ]}
           totalRecords={dataPodcast?.podcast_episodes?.length}
           recordsPerPage={dataPodcast?.podcast_episodes?.length || 10}
+          page={1}
+          onPageChange={() => {}}
           minHeight={225}
           noRecordsIcon={<NoData label="Episode tidak ditemukan" />}
           noRecordsText=""

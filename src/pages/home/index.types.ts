@@ -77,7 +77,7 @@ export interface BlogListData {
 }
 
 export interface PodcastEpisodeAttribute {
-  id?: number;
+  id: number;
   episode: number;
   title: string;
   url: string;
