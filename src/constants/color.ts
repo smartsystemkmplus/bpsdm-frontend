@@ -4,10 +4,10 @@
 
 const color = {
   primary: {
-    main: '#016DB2',
-    surface: '#C9F3FB',
-    hover: '#005499',
-    pressed: '#003F80',
+    main: '#E64816',
+    surface: '#ffdcd1',
+    hover: '#f29172',
+    pressed: '#ba380e',
   },
   secondary: {
     main: '#FCA016',

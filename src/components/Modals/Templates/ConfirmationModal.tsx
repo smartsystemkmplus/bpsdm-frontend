@@ -38,7 +38,7 @@ export default function ConfirmationModalTemplate({
     safe: {
       icon: 'ic:round-check-circle',
       mantineColor: 'primary',
-      colorPrimary: '#016DB2',
+      colorPrimary: '#E64816',
       colorSecondary: '#93E2F7',
     },
     warning: {
