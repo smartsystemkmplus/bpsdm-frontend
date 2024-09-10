@@ -6,7 +6,7 @@ import useNetworks, {
   GenericQueryResponse,
   StrapiData,
 } from '@hooks/useNetworks';
-import { Grid, Group, Loader, Skeleton, Stack } from '@mantine/core';
+import { Grid, Loader, Skeleton, Stack } from '@mantine/core';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import {
   BlocksContent,
@@ -175,6 +175,14 @@ export default function Home() {
     return 4;
   }, [data]);
 
+  const podcastGridSpan = useMemo(() => {
+    if (!dataHighlightedPodcast) return 12;
+    if (dataHighlightedPodcast.length === 1) return 12;
+    if (dataHighlightedPodcast.length === 2) return 6;
+    if (dataHighlightedPodcast.length === 3) return 4;
+    return 3;
+  }, [dataHighlightedPodcast]);
+
   return (
     <HomeLayout>
       <div className="flex flex-col gap-12">
@@ -247,7 +255,7 @@ export default function Home() {
           <h2 className="text-center text-2xl font-bold">
             Program Knowledge Sharing
           </h2>
-          <Group justify="space-evenly">
+          <Grid gutter={24} className="mx-auto">
             {(() => {
               if (isLoadingLanding) {
                 return <Loader className="mx-auto" />;
@@ -255,17 +263,19 @@ export default function Home() {
 
               if (dataHighlightedPodcast?.length) {
                 return dataHighlightedPodcast?.map((p) => (
-                  <ProgramItem
-                    id={p.id}
-                    title={p.name}
-                    imageUrl={p.thumbnail.data.attributes.url}
-                  />
+                  <Grid.Col span={podcastGridSpan}>
+                    <ProgramItem
+                      id={p.id}
+                      title={p.name}
+                      imageUrl={p.thumbnail.data.attributes.url}
+                    />
+                  </Grid.Col>
                 ));
               }
 
               return <NoData label="Tidak ditemukan" />;
             })()}
-          </Group>
+          </Grid>
         </section>
       </div>
     </HomeLayout>
