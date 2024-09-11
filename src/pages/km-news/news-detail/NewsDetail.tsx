@@ -38,7 +38,7 @@ export default function NewsDetail() {
   const crumbs: Crumb[] = useMemo(
     () => [
       {
-        title: 'Berita KM BPSDM',
+        title: 'Knowledge Center',
         href: '/km-news',
       },
       {

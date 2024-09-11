@@ -217,7 +217,7 @@ export default function KMNews() {
         </Grid>
       );
     }
-    return <NoData label="Berita KM tidak ditemukan" />;
+    return <NoData label="Data tidak ditemukan" />;
   };
 
   const renderPodcast = () => {
@@ -301,7 +301,7 @@ export default function KMNews() {
       <div className="flex flex-col gap-12">
         <Stack gap={24}>
           <h1 className="text-4xl font-bold">
-            {podcastId ? dataPodcast?.name : 'Berita KM BPSDM'}
+            {podcastId ? dataPodcast?.name : 'Knowledge Center'}
           </h1>
           {!podcastId && (
             <p>
