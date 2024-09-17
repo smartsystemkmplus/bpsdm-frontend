@@ -176,11 +176,8 @@ export default function Home() {
   }, [data]);
 
   const podcastGridSpan = useMemo(() => {
-    if (!dataHighlightedPodcast) return 12;
-    if (dataHighlightedPodcast.length === 1) return 12;
-    if (dataHighlightedPodcast.length === 2) return 6;
-    if (dataHighlightedPodcast.length === 3) return 4;
-    return 3;
+    if (!dataHighlightedPodcast) return 5;
+    return 1;
   }, [dataHighlightedPodcast]);
 
   return (
@@ -255,7 +252,7 @@ export default function Home() {
           <h2 className="text-center text-2xl font-bold">
             Program Knowledge Sharing
           </h2>
-          <Grid gutter={24} className="mx-auto">
+          <Grid gutter={24} columns={5} className="mx-auto">
             {(() => {
               if (isLoadingLanding) {
                 return <Loader className="mx-auto" />;
