@@ -49,6 +49,9 @@ export default function KMNews() {
   const [activeFolder, setActiveFolder] = useState(
     paramFolderId || 'all'
   );
+  const [activeFolderLabel, setActiveFolderLabel] = useState('');
+
+  console.log({ activeFolder });
   const [totalData, setTotalData] = useState(0);
 
   // * Update URL Search Param on folder change
@@ -309,7 +312,7 @@ export default function KMNews() {
               <span className="font-bold text-primary-main">
                 {data?.blogs?.length || 0}
               </span>{' '}
-              Berita
+              artikel {activeFolderLabel.replace(/\(\d*\)/g, '')}
             </p>
           )}
         </Stack>
@@ -323,11 +326,14 @@ export default function KMNews() {
                 <NestedFolder
                   data={folders}
                   value={activeFolder}
-                  onChange={(v) => {
+                  onChange={(v, label) => {
                     if (podcastId) {
                       searchParams.delete('pod');
                     }
                     setActiveFolder(v);
+                    setActiveFolderLabel(
+                      label === 'all' ? '' : label
+                    );
                   }}
                 />
               </Stack>

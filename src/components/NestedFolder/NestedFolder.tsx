@@ -10,7 +10,7 @@ export interface NestedFolderItem {
   child?: Omit<NestedFolderItem, 'child'>[];
 }
 interface ItemRendererProps extends NestedFolderItem {
-  onChange?: (newValue: string) => void;
+  onChange?: (newValue: string, label: string) => void;
 }
 function ItemRenderer({
   activeValue,
@@ -39,7 +39,7 @@ function ItemRenderer({
   );
 
   const handleChange = () => {
-    onChange?.(value);
+    onChange?.(value, title);
   };
 
   if (!child?.length) {
@@ -93,7 +93,7 @@ function ItemRenderer({
 }
 
 interface NestedFolderProps {
-  onChange?: (newValue: string) => void;
+  onChange?: (newValue: string, label: string) => void;
   value?: string;
   data: NestedFolderItem[];
 }
