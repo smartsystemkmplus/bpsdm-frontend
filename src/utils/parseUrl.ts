@@ -14,6 +14,6 @@ export default function parseUrl(str: string) {
       href = `https://${match}`;
       prefix = 'https://';
     }
-    return `<a href="${href}" target="_blank" style="color:#E64816">${prefix}${match}</a>`;
+    return `<a href="${href}" target="_blank" style="color:#014780">${prefix}${match}</a>`;
   });
 }

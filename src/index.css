@@ -85,8 +85,8 @@ ul {
       background: white;
     }
     &[data-active='true'] {
-      color: #e64816;
-      border-color: #e64816;
+      color: #014780;
+      border-color: #014780;
     }
   }
 }
@@ -123,8 +123,8 @@ ul {
   border: none;
   &[data-active='true'] {
     background: white;
-    color: #e64816;
-    border: 1px solid #e64816;
+    color: #014780;
+    border: 1px solid #014780;
   }
 }
 

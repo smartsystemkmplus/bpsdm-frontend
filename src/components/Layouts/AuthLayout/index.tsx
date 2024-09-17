@@ -27,7 +27,7 @@ export default function AuthLayout({
         className="relative min-h-screen w-7/12"
         style={{
           background:
-            'linear-gradient(156.04deg, #E64816 0%, #a22d06 100%)',
+            'linear-gradient(156.04deg, #016DB2 0%, #003F80 100%)',
         }}
       >
         <div className="relative z-[2] flex h-full flex-col items-center justify-center gap-8 text-center text-base-white">
@@ -49,7 +49,7 @@ export default function AuthLayout({
           </div>
         </div>
         <img
-          src="/AuthPageOrnamentV2.png"
+          src="/AuthPageOrnament.png"
           alt="ornament"
           className="absolute bottom-0 right-0 z-[1]"
         />
