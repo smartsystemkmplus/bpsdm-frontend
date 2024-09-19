@@ -6,7 +6,7 @@ import useNetworks, {
   GenericQueryResponse,
   StrapiData,
 } from '@hooks/useNetworks';
-import { Grid, Loader, Skeleton, Stack } from '@mantine/core';
+import { Button, Grid, Loader, Skeleton, Stack } from '@mantine/core';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import {
   BlocksContent,
@@ -181,34 +181,46 @@ export default function Home() {
   }, [dataHighlightedPodcast]);
 
   return (
-    <HomeLayout>
+    <HomeLayout className="px-0">
       <div className="flex flex-col gap-12">
-        {isLoadingLanding ? (
-          <Skeleton h={152} />
-        ) : (
-          <img
-            alt="hero-banner"
-            src={dataBanner?.url}
-            className="aspect-[16/2] rounded-md border"
-          />
-        )}
+        <section className="px-16">
+          {isLoadingLanding ? (
+            <Skeleton h={152} />
+          ) : (
+            <img
+              alt="hero-banner"
+              src={dataBanner?.url}
+              className="aspect-[16/2] rounded-md border"
+            />
+          )}
+        </section>
 
-        {isLoadingLanding ? (
-          <Skeleton h={480} />
-        ) : (
-          <HighlightBlog
-            slug={dataHighlightedBlog?.slug}
-            title={dataHighlightedBlog?.title}
-            content={dataHighlightedBlog?.content}
-            thumbnailUrl={
-              dataHighlightedBlog?.thumbnail_large?.data?.attributes
-                ?.url ||
-              dataHighlightedBlog?.thumbnail?.data?.attributes?.url
-            }
-          />
-        )}
+        <section className="px-16">
+          {isLoadingLanding ? (
+            <Skeleton h={480} />
+          ) : (
+            <HighlightBlog
+              slug={dataHighlightedBlog?.slug}
+              title={dataHighlightedBlog?.title}
+              content={dataHighlightedBlog?.content}
+              thumbnailUrl={
+                dataHighlightedBlog?.thumbnail_large?.data?.attributes
+                  ?.url ||
+                dataHighlightedBlog?.thumbnail?.data?.attributes?.url
+              }
+            />
+          )}
+        </section>
 
-        <section className="flex flex-col gap-6">
+        <section className="grid grid-cols-3 items-center">
+          <div className="h-4 bg-primary-main" />
+          <h2 className="text-center text-2xl font-bold text-primary-main">
+            Berita dan Asset Pengetahuan
+          </h2>
+          <div className="h-4 bg-primary-main" />
+        </section>
+
+        <section className="flex flex-col gap-6 px-16">
           <Grid gutter={24}>
             {isLoading ? (
               <>
@@ -239,19 +251,21 @@ export default function Home() {
           </Grid>
 
           {(data?.pagination?.total || 0) > PAGE_SIZE && (
-            <Link
-              to="/km-news"
-              className="text-center text-primary-main"
-            >
-              Lihat Semua
+            <Link to="/km-news" className="text-center">
+              <Button className="w-full">Lihat Semua</Button>
             </Link>
           )}
         </section>
 
-        <section className="mt-[72px] flex flex-col gap-[72px]">
-          <h2 className="text-center text-2xl font-bold">
-            Program Knowledge Sharing
+        <section className="grid grid-cols-3 items-center">
+          <div className="h-4 bg-primary-main" />
+          <h2 className="text-center text-2xl font-bold text-primary-main">
+            Pembelajaran Mandiri
           </h2>
+          <div className="h-4 bg-primary-main" />
+        </section>
+
+        <section className="mt-[72px] flex flex-col gap-[72px] px-16">
           <Grid gutter={24} columns={5} className="mx-auto">
             {(() => {
               if (isLoadingLanding) {

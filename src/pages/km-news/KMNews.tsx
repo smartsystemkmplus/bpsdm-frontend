@@ -51,7 +51,6 @@ export default function KMNews() {
   );
   const [activeFolderLabel, setActiveFolderLabel] = useState('');
 
-  console.log({ activeFolder });
   const [totalData, setTotalData] = useState(0);
 
   // * Update URL Search Param on folder change
