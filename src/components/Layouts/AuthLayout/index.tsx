@@ -8,7 +8,7 @@ export default function AuthLayout({
   const activeIndex = 0;
   const slideProps = [
     {
-      img: '/BannerKMS.png',
+      img: '/BannerKMSV2.png',
       title: 'Knowledge Management System',
       description:
         'Wadah bersosialisasi dan berkomunikasi sesama pegawai',
@@ -27,7 +27,7 @@ export default function AuthLayout({
         className="relative min-h-screen w-7/12"
         style={{
           background:
-            'linear-gradient(156.04deg, #016DB2 0%, #003F80 100%)',
+            'linear-gradient(156deg, #334A9F 0%, #0D1D58 100%)',
         }}
       >
         <div className="relative z-[2] flex h-full flex-col items-center justify-center gap-8 text-center text-base-white">
@@ -49,7 +49,7 @@ export default function AuthLayout({
           </div>
         </div>
         <img
-          src="/AuthPageOrnament.png"
+          src="/AuthPageOrnamentV2.png"
           alt="ornament"
           className="absolute bottom-0 right-0 z-[1]"
         />
