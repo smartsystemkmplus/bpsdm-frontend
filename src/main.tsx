@@ -60,10 +60,18 @@ const router = createBrowserRouter([
       },
       {
         path: '/km-news',
-        element: <KMNews />,
+        element: <KMNews category="Berita KM" />,
       },
       {
         path: '/km-news/:slug',
+        element: <NewsDetail category="Berita KM" />,
+      },
+      {
+        path: '/knowledge-center',
+        element: <KMNews />,
+      },
+      {
+        path: '/knowledge-center/:slug',
         element: <NewsDetail />,
       },
     ],

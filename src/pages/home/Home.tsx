@@ -25,18 +25,24 @@ import {
 interface HighlightBlogProps {
   slug?: string;
   title?: string;
+  category?: string;
   content?: BlocksContent;
   thumbnailUrl?: string;
 }
 function HighlightBlog({
   slug,
   title,
+  category,
   content,
   thumbnailUrl,
 }: HighlightBlogProps) {
   return (
     <a
-      href={`/km-news/${slug}`}
+      href={
+        category === 'Berita KM'
+          ? `/km-news/${slug}`
+          : `/knowledge-center/${slug}`
+      }
       className="relative flex h-[480px] items-end rounded-md"
     >
       <img
@@ -202,6 +208,9 @@ export default function Home() {
             <HighlightBlog
               slug={dataHighlightedBlog?.slug}
               title={dataHighlightedBlog?.title}
+              category={
+                dataHighlightedBlog?.category?.data?.attributes?.name
+              }
               content={dataHighlightedBlog?.content}
               thumbnailUrl={
                 dataHighlightedBlog?.thumbnail_large?.data?.attributes

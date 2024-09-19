@@ -16,3 +16,5 @@ export interface FolderAttribute {
 export interface Folder {
   data: StrapiData<FolderAttribute>[];
 }
+
+export type Category = 'Berita KM' | 'Knowledge Center' | 'Agenda KM';

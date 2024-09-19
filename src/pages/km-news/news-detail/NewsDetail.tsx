@@ -14,7 +14,14 @@ import getPathWithSearchParams from '@utils/getPathWithSearchParams';
 import { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 
-export default function NewsDetail() {
+import { Category } from '../index.types';
+
+interface NewsDetailProps {
+  category?: Category;
+}
+export default function NewsDetail({
+  category = 'Knowledge Center',
+}: NewsDetailProps) {
   const { slug } = useParams();
   const { query } = useNetworks(BASE_PROXY.strapi);
 
@@ -38,7 +45,7 @@ export default function NewsDetail() {
   const crumbs: Crumb[] = useMemo(
     () => [
       {
-        title: 'Knowledge Center',
+        title: category,
         href: '/km-news',
       },
       {
@@ -46,7 +53,7 @@ export default function NewsDetail() {
         href: getPathWithSearchParams(),
       },
     ],
-    [data]
+    [data, category]
   );
 
   if (!isLoading && !data) {

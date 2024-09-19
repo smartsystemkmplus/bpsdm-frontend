@@ -46,6 +46,12 @@ export default function Navbar() {
           to="/km-news"
           className="font-semibold text-secondary-pressed"
         >
+          Berita KM
+        </Link>
+        <Link
+          to="/knowledge-center"
+          className="font-semibold text-secondary-pressed"
+        >
           Knowledge Center
         </Link>
         {isAuthenticated && (

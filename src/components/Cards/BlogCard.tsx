@@ -24,7 +24,11 @@ export default function BlogCard({
 }: BlogCardProps) {
   return (
     <a
-      href={`/km-news/${slug}`}
+      href={
+        category === 'Berita KM'
+          ? `/km-news/${slug}`
+          : `/knowledge-center/${slug}`
+      }
       className="relative flex h-fit min-h-[376px] flex-col gap-3"
     >
       <img

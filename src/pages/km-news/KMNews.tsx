@@ -23,7 +23,7 @@ import { DataTable } from 'mantine-datatable';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { FolderAttribute } from './index.types';
+import { Category, FolderAttribute } from './index.types';
 
 function BlogsSkeleton() {
   return (
@@ -42,7 +42,12 @@ function BlogsSkeleton() {
 }
 
 const PAGE_SIZE = 9;
-export default function KMNews() {
+interface KMNewsProps {
+  category?: Category;
+}
+export default function KMNews({
+  category = 'Knowledge Center',
+}: KMNewsProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const paramFolderId = searchParams.get('f');
   const podcastId = searchParams.get('pod');
@@ -62,7 +67,7 @@ export default function KMNews() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFolder, podcastId]);
 
-  const blogFilterParam = useMemo(() => {
+  const blogFolderParam = useMemo(() => {
     if (activeFolder === 'all') return {};
     const subFolderIds = activeFolder
       .replace('parent-', '')
@@ -74,6 +79,16 @@ export default function KMNews() {
     });
     return result;
   }, [activeFolder]);
+
+  const blogFilterParam = useMemo(() => {
+    const params = { ...blogFolderParam };
+    if (category === 'Berita KM') {
+      params['filters[category][name][$eq]'] = 'Berita KM';
+    } else {
+      params['filters[category][name][$ne]'] = 'Berita KM';
+    }
+    return params;
+  }, [blogFolderParam, category]);
 
   const { query, infiniteQuery } = useNetworks(BASE_PROXY.strapi);
   const { data, isLoading, isFetchingNextPage } =
@@ -152,6 +167,7 @@ export default function KMNews() {
     STRAPI_ENDPOINT.GET.folders,
     {
       queryKey: ['folders'],
+      enabled: category === 'Knowledge Center',
     },
     {
       params: {
@@ -298,12 +314,23 @@ export default function KMNews() {
     );
   };
 
+  const renderMainContent = () => {
+    return (
+      <>
+        {podcastId ? renderPodcast() : renderKMNews()}
+        {isFetchingNextPage && (
+          <Loader className="mx-auto" type="dots" />
+        )}
+      </>
+    );
+  };
+
   return (
     <HomeLayout>
       <div className="flex flex-col gap-12">
         <Stack gap={24}>
           <h1 className="text-4xl font-bold">
-            {podcastId ? dataPodcast?.name : 'Knowledge Center'}
+            {podcastId ? dataPodcast?.name : category}
           </h1>
           {!podcastId && (
             <p>
@@ -311,40 +338,42 @@ export default function KMNews() {
               <span className="font-bold text-primary-main">
                 {data?.blogs?.length || 0}
               </span>{' '}
-              artikel {activeFolderLabel.replace(/\(\d*\)/g, '')}
+              {category === 'Berita KM'
+                ? 'berita'
+                : `artikel ${activeFolderLabel.replace(/\(\d*\)/g, '')}`}
             </p>
           )}
         </Stack>
 
-        <AsideContentLayout
-          aside={
-            isLoadingFolders ? (
-              <Skeleton h={300} />
-            ) : (
-              <Stack className="rounded-md border p-4">
-                <NestedFolder
-                  data={folders}
-                  value={activeFolder}
-                  onChange={(v, label) => {
-                    if (podcastId) {
-                      searchParams.delete('pod');
-                    }
-                    setActiveFolder(v);
-                    setActiveFolderLabel(
-                      label === 'all' ? '' : label
-                    );
-                  }}
-                />
-              </Stack>
-            )
-          }
-        >
-          {podcastId ? renderPodcast() : renderKMNews()}
-
-          {isFetchingNextPage && (
-            <Loader className="mx-auto" type="dots" />
-          )}
-        </AsideContentLayout>
+        {category === 'Berita KM' ? (
+          renderMainContent()
+        ) : (
+          <AsideContentLayout
+            aside={
+              isLoadingFolders ? (
+                <Skeleton h={300} />
+              ) : (
+                <Stack className="rounded-md border p-4">
+                  <NestedFolder
+                    data={folders}
+                    value={activeFolder}
+                    onChange={(v, label) => {
+                      if (podcastId) {
+                        searchParams.delete('pod');
+                      }
+                      setActiveFolder(v);
+                      setActiveFolderLabel(
+                        label === 'all' ? '' : label
+                      );
+                    }}
+                  />
+                </Stack>
+              )
+            }
+          >
+            {renderMainContent()}
+          </AsideContentLayout>
+        )}
       </div>
     </HomeLayout>
   );
