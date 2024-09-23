@@ -7,14 +7,16 @@ import Navbar from './Navbar';
 interface HomeLayoutProps {
   children: ReactNode;
   className?: string;
+  withNavbar?: boolean;
 }
 export default function HomeLayout({
   children,
   className,
+  withNavbar = true,
 }: HomeLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col justify-between">
-      <Navbar />
+      {withNavbar && <Navbar />}
       <section
         className={cn(
           'size-full min-h-[calc(100vh-66px)] p-16',

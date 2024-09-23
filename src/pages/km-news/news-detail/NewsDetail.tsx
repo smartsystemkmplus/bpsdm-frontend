@@ -7,6 +7,7 @@ import useNetworks, {
   StrapiData,
 } from '@hooks/useNetworks';
 import { Loader, Stack } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { BlogAttribute } from '@pages/home/index.types';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
@@ -22,6 +23,7 @@ interface NewsDetailProps {
 export default function NewsDetail({
   category = 'Knowledge Center',
 }: NewsDetailProps) {
+  const isMobileScreen = useMediaQuery('(max-width: 768px)');
   const { slug } = useParams();
   const { query } = useNetworks(BASE_PROXY.strapi);
 
@@ -61,15 +63,19 @@ export default function NewsDetail({
   }
 
   return (
-    <HomeLayout>
-      <SimpleBreadcrumbs crumbs={crumbs} />
+    <HomeLayout withNavbar={!isMobileScreen} className="p-4 lg:p-16">
+      {!isMobileScreen && <SimpleBreadcrumbs crumbs={crumbs} />}
 
       {isLoading ? (
         <Stack className="size-full h-[45vh]">
           <Loader className="m-auto" />
         </Stack>
       ) : (
-        <Stack gap={24} px={120} py={72}>
+        <Stack
+          gap={24}
+          px={isMobileScreen ? 8 : 120}
+          py={isMobileScreen ? 8 : 72}
+        >
           <h2 className="font-bold uppercase text-primary-main">
             {data?.category?.data?.attributes?.name}
           </h2>

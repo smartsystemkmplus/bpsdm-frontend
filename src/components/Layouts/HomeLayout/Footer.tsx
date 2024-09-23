@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button, Divider, Group, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
+import cn from '@utils/cn';
 import showErrorDialog from '@utils/showErrorDialog';
 import showSuccessDialog from '@utils/showSuccessDialog';
 import { z } from 'zod';
@@ -78,7 +79,12 @@ export default function Footer() {
 
   return (
     <footer className="flex flex-col">
-      <section className="flex items-center justify-between gap-5 bg-primary-pressed px-12 py-6 text-base-white">
+      <section
+        className={cn(
+          'flex flex-col items-center gap-5 bg-primary-pressed px-4 py-6 text-base-white',
+          'lg:flex-row lg:px-12 lg:justify-between'
+        )}
+      >
         <div className="flex flex-col gap-1">
           <p className="font-semibold">DAFTARKAN EMAIL ANDA</p>
           <p className="text-sm">
@@ -91,13 +97,13 @@ export default function Footer() {
           <TextInput
             placeholder="Masukkan email Anda"
             size="md"
-            className="w-[546px]"
+            className="w-full lg:w-[546px]"
             {...form.getInputProps('email')}
           />
           <Button
             variant="outline"
             color="white"
-            className="shrink-0"
+            className="w-full shrink-0 lg:w-fit"
             disabled={!form.isValid()}
             loading={isPending}
             onClick={handleRegisterEmail}
@@ -107,8 +113,13 @@ export default function Footer() {
         </Group>
       </section>
 
-      <section className="mt-12">
-        <div className="flex items-end justify-between p-6">
+      <section className="lg:mt-12">
+        <div
+          className={cn(
+            'flex flex-col p-6 gap-5',
+            'lg:flex-row lg:items-end lg:justify-between lg:gap-2'
+          )}
+        >
           <div className="flex flex-col items-start gap-6">
             <img
               src="/Logo_KM.png"
