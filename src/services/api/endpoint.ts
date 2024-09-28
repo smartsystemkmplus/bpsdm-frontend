@@ -73,6 +73,7 @@ export const STRAPI_ENDPOINT = {
     folders: '/api/categories',
     podcasts: '/api/podcasts',
     simdiklat: '/api/simdiklat',
+    carousel: '/api/landing-page-carousels',
   },
 };
 

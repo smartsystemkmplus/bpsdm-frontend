@@ -8,64 +8,70 @@ import useNetworks, {
 } from '@hooks/useNetworks';
 import { Button, Grid, Loader, Skeleton, Stack } from '@mantine/core';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
-import {
-  BlocksContent,
-  BlocksRenderer,
-} from '@strapi/blocks-react-renderer';
-import shortenStrapiRTEContent from '@utils/shortenStrapiRTEContent';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  A11y,
+  Autoplay,
+  Navigation,
+  Pagination,
+} from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/bundle';
 
 import {
   BlogAttribute,
   BlogListData,
+  CarouselAttribute,
+  CarouselListData,
   LandingAttribute,
   SimdiklatAttribute,
 } from './index.types';
 
-interface HighlightBlogProps {
-  slug?: string;
-  title?: string;
-  category?: string;
-  content?: BlocksContent;
-  thumbnailUrl?: string;
-}
-function HighlightBlog({
-  slug,
-  title,
-  category,
-  content,
-  thumbnailUrl,
-}: HighlightBlogProps) {
-  return (
-    <a
-      href={
-        category === 'Berita KM'
-          ? `/km-news/${slug}`
-          : `/knowledge-center/${slug}`
-      }
-      className="relative flex h-[480px] items-end rounded-md"
-    >
-      <img
-        alt="highlight"
-        src={thumbnailUrl}
-        className="absolute z-[1] h-[480px] w-full rounded-md object-cover"
-      />
-      <div className="z-[2] flex w-full flex-col gap-2 rounded-b-md bg-base-black/60 p-6 text-base-white">
-        <h3 className="line-clamp-1 break-all text-2xl font-semibold">
-          {title}
-        </h3>
-        <p className="line-clamp-1 break-all text-sm">
-          {!!content && (
-            <BlocksRenderer
-              content={shortenStrapiRTEContent(content)}
-            />
-          )}
-        </p>
-      </div>
-    </a>
-  );
-}
+// interface HighlightBlogProps {
+//   slug?: string;
+//   title?: string;
+//   category?: string;
+//   content?: BlocksContent;
+//   thumbnailUrl?: string;
+// }
+// function HighlightBlog({
+//   slug,
+//   title,
+//   category,
+//   content,
+//   thumbnailUrl,
+// }: HighlightBlogProps) {
+//   return (
+//     <a
+//       href={
+//         category === 'Berita KM'
+//           ? `/km-news/${slug}`
+//           : `/knowledge-center/${slug}`
+//       }
+//       className="relative flex h-[480px] items-end rounded-md"
+//     >
+//       <img
+//         alt="highlight"
+//         src={thumbnailUrl}
+//         className="absolute z-[1] h-[480px] w-full rounded-md object-cover"
+//       />
+//       <div className="z-[2] flex w-full flex-col gap-2 rounded-b-md bg-base-black/60 p-6 text-base-white">
+//         <h3 className="line-clamp-1 break-all text-2xl font-semibold">
+//           {title}
+//         </h3>
+//         <p className="line-clamp-1 break-all text-sm">
+//           {!!content && (
+//             <BlocksRenderer
+//               content={shortenStrapiRTEContent(content)}
+//             />
+//           )}
+//         </p>
+//       </div>
+//     </a>
+//   );
+// }
 
 interface ProgramItemProps {
   id: number;
@@ -145,12 +151,31 @@ export default function Home() {
       }
     );
 
-  const dataHighlightedBlog = useMemo(() => {
-    if (dataLanding) {
-      return dataLanding?.highlightedBlog?.data?.attributes;
+  const { data: dataCarousel, isLoading: isLoadingCarousel } = query<
+    GenericQueryResponse<StrapiData<CarouselAttribute>[]>,
+    CarouselListData
+  >(
+    STRAPI_ENDPOINT.GET.carousel,
+    {
+      queryKey: ['carousel'],
+      select: (res) => ({
+        items: res?.data?.map((d) => d?.attributes),
+        pagination: res!.meta!.pagination!,
+      }),
+    },
+    {
+      params: {
+        populate: 'deep',
+      },
     }
-    return null;
-  }, [dataLanding]);
+  );
+
+  // const dataHighlightedBlog = useMemo(() => {
+  //   if (dataLanding) {
+  //     return dataLanding?.highlightedBlog?.data?.attributes;
+  //   }
+  //   return null;
+  // }, [dataLanding]);
 
   const dataBanner = useMemo(() => {
     if (dataLanding) {
@@ -220,22 +245,53 @@ export default function Home() {
         </section>
 
         <section className="px-16">
-          {isLoadingLanding ? (
+          {isLoadingCarousel ? (
             <Skeleton h={480} />
           ) : (
-            <HighlightBlog
-              slug={dataHighlightedBlog?.slug}
-              title={dataHighlightedBlog?.title}
-              category={
-                dataHighlightedBlog?.category?.data?.attributes?.name
-              }
-              content={dataHighlightedBlog?.content}
-              thumbnailUrl={
-                dataHighlightedBlog?.thumbnail_large?.data?.attributes
-                  ?.url ||
-                dataHighlightedBlog?.thumbnail?.data?.attributes?.url
-              }
-            />
+            <Swiper
+              modules={[Navigation, Pagination, A11y, Autoplay]}
+              spaceBetween={50}
+              slidesPerView={1}
+              loop
+              pagination={{ clickable: true }}
+              navigation
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: true,
+              }}
+            >
+              {dataCarousel?.items?.map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <SwiperSlide key={`carousel-${i}`}>
+                  <a
+                    href={item?.url}
+                    className="flex h-[480px] items-end rounded-md"
+                  >
+                    <img
+                      alt="thumbnail"
+                      src={
+                        item?.image?.data?.attributes?.previewUrl ||
+                        item?.image?.data?.attributes?.url
+                      }
+                      className="h-[480px] w-full rounded-md object-cover"
+                    />
+                  </a>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            // <HighlightBlog
+            //   slug={dataHighlightedBlog?.slug}
+            //   title={dataHighlightedBlog?.title}
+            //   category={
+            //     dataHighlightedBlog?.category?.data?.attributes?.name
+            //   }
+            //   content={dataHighlightedBlog?.content}
+            //   thumbnailUrl={
+            //     dataHighlightedBlog?.thumbnail_large?.data?.attributes
+            //       ?.url ||
+            //     dataHighlightedBlog?.thumbnail?.data?.attributes?.url
+            //   }
+            // />
           )}
         </section>
 

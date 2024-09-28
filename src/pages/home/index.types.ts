@@ -126,3 +126,13 @@ export interface SimdiklatAttribute {
   /** Formatted in ISO String */
   updatedAt: string;
 }
+
+export interface CarouselAttribute {
+  image: Media;
+  url: string;
+}
+
+export interface CarouselListData {
+  items: CarouselAttribute[];
+  pagination: StrapiPagination;
+}
