@@ -72,6 +72,7 @@ export const STRAPI_ENDPOINT = {
     blogs: '/api/blogs',
     folders: '/api/categories',
     podcasts: '/api/podcasts',
+    simdiklat: '/api/simdiklat',
   },
 };
 

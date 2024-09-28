@@ -115,3 +115,14 @@ export interface LandingAttribute {
   /** Formatted in ISO String */
   updatedAt: string;
 }
+
+export interface SimdiklatAttribute {
+  thumbnail: Media;
+  url: string;
+  /** Formatted in ISO String */
+  createdAt: string;
+  /** Formatted in ISO String */
+  publishedAt: string;
+  /** Formatted in ISO String */
+  updatedAt: string;
+}

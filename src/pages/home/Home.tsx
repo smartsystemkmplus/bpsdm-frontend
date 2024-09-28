@@ -20,6 +20,7 @@ import {
   BlogAttribute,
   BlogListData,
   LandingAttribute,
+  SimdiklatAttribute,
 } from './index.types';
 
 interface HighlightBlogProps {
@@ -126,6 +127,23 @@ export default function Home() {
       },
     }
   );
+
+  const { data: dataSimdiklat, isLoading: isLoadingSimdiklat } =
+    query<
+      GenericQueryResponse<StrapiData<SimdiklatAttribute>>,
+      SimdiklatAttribute
+    >(
+      STRAPI_ENDPOINT.GET.simdiklat,
+      {
+        queryKey: ['simdiklat'],
+        select: (res) => res?.data?.attributes,
+      },
+      {
+        params: {
+          populate: 'deep',
+        },
+      }
+    );
 
   const dataHighlightedBlog = useMemo(() => {
     if (dataLanding) {
@@ -296,6 +314,32 @@ export default function Home() {
               return <NoData label="Tidak ditemukan" />;
             })()}
           </Grid>
+        </section>
+
+        <section className="grid grid-cols-3 items-center">
+          <div className="h-4 bg-primary-main" />
+          <h2 className="text-center text-2xl font-bold text-primary-main">
+            SIMDIKLAT
+          </h2>
+          <div className="h-4 bg-primary-main" />
+        </section>
+
+        <section className="flex items-center justify-center gap-[72px] px-16">
+          {isLoadingSimdiklat ? (
+            <Skeleton w={200} h={120} />
+          ) : (
+            <a href={dataSimdiklat?.url}>
+              <img
+                alt="simdiklat"
+                src={
+                  dataSimdiklat?.thumbnail?.data?.attributes
+                    ?.previewUrl ||
+                  dataSimdiklat?.thumbnail?.data?.attributes?.url
+                }
+                className="h-[120px]"
+              />
+            </a>
+          )}
         </section>
       </div>
     </HomeLayout>
