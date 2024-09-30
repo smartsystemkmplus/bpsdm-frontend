@@ -265,7 +265,7 @@ export default function Home() {
                 <SwiperSlide key={`carousel-${i}`}>
                   <a
                     href={item?.url}
-                    className="flex h-[480px] items-end rounded-md"
+                    className="flex aspect-[3/1] items-end rounded-md"
                   >
                     <img
                       alt="thumbnail"
@@ -273,7 +273,7 @@ export default function Home() {
                         item?.image?.data?.attributes?.previewUrl ||
                         item?.image?.data?.attributes?.url
                       }
-                      className="h-[480px] w-full rounded-md object-cover"
+                      className="aspect-[3/1] w-full rounded-md object-cover"
                     />
                   </a>
                 </SwiperSlide>
