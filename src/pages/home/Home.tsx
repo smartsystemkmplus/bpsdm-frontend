@@ -239,7 +239,7 @@ export default function Home() {
             <img
               alt="hero-banner"
               src={dataBanner?.url}
-              className="aspect-[16/2] rounded-md border"
+              className="aspect-[16/2] w-full rounded-md border"
             />
           )}
         </section>
