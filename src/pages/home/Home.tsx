@@ -211,6 +211,7 @@ export default function Home() {
     {
       params: {
         populate: 'deep',
+        sort: 'publishedAt:desc',
         'pagination[page]': 1,
         'pagination[pageSize]': PAGE_SIZE,
       },

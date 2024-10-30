@@ -130,6 +130,7 @@ export default function KMNews({
         {
           params: {
             populate: 'deep',
+            sort: 'publishedAt:desc',
             'pagination[pageSize]': PAGE_SIZE,
             ...blogFilterParam,
           },
