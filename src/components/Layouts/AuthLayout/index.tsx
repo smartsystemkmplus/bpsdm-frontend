@@ -8,7 +8,7 @@ export default function AuthLayout({
   const activeIndex = 0;
   const slideProps = [
     {
-      img: '/BannerKMS.png',
+      img: '/BannerKMSV2.png',
       title: 'Knowledge Management System',
       description:
         'Wadah bersosialisasi dan berkomunikasi sesama pegawai',
@@ -27,11 +27,11 @@ export default function AuthLayout({
         className="relative min-h-screen w-7/12"
         style={{
           background:
-            'linear-gradient(156.04deg, #016DB2 0%, #003F80 100%)',
+            'linear-gradient(156deg, #334A9F 0%, #0D1D58 100%)',
         }}
       >
-        <div className="relative z-[2] flex flex-col items-center gap-8 text-center text-base-white">
-          <div className="relative items-center justify-between px-20 pt-20">
+        <div className="relative z-[2] flex h-full flex-col items-center justify-center gap-8 text-center text-base-white">
+          <div className="relative items-center justify-between px-20">
             <img
               className="h-[50vh] w-full cursor-pointer rounded-lg object-contain"
               src={slideProps[activeIndex].img}
@@ -40,14 +40,16 @@ export default function AuthLayout({
             />
           </div>
           <div>
-            <p className="mb-1 text-lg font-medium">
+            <p className="mb-1 text-3xl font-semibold">
               {slideProps[activeIndex].title}
             </p>
-            <p>{slideProps[activeIndex].description}</p>
+            <p className="text-lg">
+              {slideProps[activeIndex].description}
+            </p>
           </div>
         </div>
         <img
-          src="/AuthPageOrnament.png"
+          src="/AuthPageOrnamentV2.png"
           alt="ornament"
           className="absolute bottom-0 right-0 z-[1]"
         />

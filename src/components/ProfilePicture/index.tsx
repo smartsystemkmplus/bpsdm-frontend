@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Avatar, MantineSize } from '@mantine/core';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -7,7 +8,7 @@ interface ProfilePictureProps {
   alt: string;
   withBadge?: boolean;
   badgeIcon?: React.ReactNode;
-  name?: string;
+  name?: any;
   size?: number | MantineSize | string;
   className?: string;
 }

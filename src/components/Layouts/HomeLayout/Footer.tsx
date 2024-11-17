@@ -1,11 +1,90 @@
 import color from '@constants/color';
+import useNetworks, {
+  GenericQueryResponse,
+  StrapiData,
+} from '@hooks/useNetworks';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button, Divider, Group, TextInput } from '@mantine/core';
+import { useForm, zodResolver } from '@mantine/form';
+import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
+import cn from '@utils/cn';
+import showErrorDialog from '@utils/showErrorDialog';
+import showSuccessDialog from '@utils/showSuccessDialog';
+import { z } from 'zod';
+
+interface FooterAttribute {
+  address: string;
+  email: string;
+  phoneNumber: string;
+  /** Formatted in ISO String */
+  createdAt: string;
+  /** Formatted in ISO String */
+  publishedAt: string;
+  /** Formatted in ISO String */
+  updatedAt: string;
+}
 
 export default function Footer() {
+  const form = useForm({
+    initialValues: {
+      email: '',
+    },
+    validate: zodResolver(
+      z.object({
+        email: z.string().email('Format email tidak valid'),
+      })
+    ),
+  });
+
+  const { query, mutation } = useNetworks(BASE_PROXY.strapi);
+
+  const { data } = query<
+    GenericQueryResponse<StrapiData<FooterAttribute>>,
+    FooterAttribute
+  >(STRAPI_ENDPOINT.GET.footer, {
+    queryKey: ['footer'],
+    select: (res) => res?.data?.attributes,
+  });
+
+  const { mutate, isPending } = mutation('post');
+
+  const handleRegisterEmail = () => {
+    const reqBody = {
+      data: { email: form.values.email },
+    };
+    mutate(
+      {
+        endpoint: STRAPI_ENDPOINT.POST.subscriberEmail,
+        data: reqBody,
+      },
+      {
+        onError: (err) => {
+          if (
+            err.response?.data?.error?.message ===
+            'This attribute must be unique'
+          ) {
+            showErrorDialog('Email sudah terdaftar');
+          } else {
+            showErrorDialog(err);
+          }
+        },
+        onSuccess: () =>
+          showSuccessDialog({
+            title: 'Berhasil',
+            message: 'Email anda berhasil didaftarkan',
+          }),
+      }
+    );
+  };
+
   return (
     <footer className="flex flex-col">
-      <section className="flex items-center justify-between gap-5 bg-primary-pressed px-12 py-6 text-base-white">
+      <section
+        className={cn(
+          'flex flex-col items-center gap-5 bg-primary-pressed px-4 py-6 text-base-white',
+          'lg:flex-row lg:px-12 lg:justify-between'
+        )}
+      >
         <div className="flex flex-col gap-1">
           <p className="font-semibold">DAFTARKAN EMAIL ANDA</p>
           <p className="text-sm">
@@ -18,30 +97,36 @@ export default function Footer() {
           <TextInput
             placeholder="Masukkan email Anda"
             size="md"
-            className="w-[546px]"
+            className="w-full lg:w-[546px]"
+            {...form.getInputProps('email')}
           />
           <Button
             variant="outline"
             color="white"
-            className="shrink-0"
+            className="w-full shrink-0 lg:w-fit"
+            disabled={!form.isValid()}
+            loading={isPending}
+            onClick={handleRegisterEmail}
           >
             DAFTAR SEKARANG
           </Button>
         </Group>
       </section>
 
-      <section className="mt-12">
-        <div className="flex items-end justify-between p-6">
+      <section className="lg:mt-12">
+        <div
+          className={cn(
+            'flex flex-col p-6 gap-5',
+            'lg:flex-row lg:items-end lg:justify-between lg:gap-2'
+          )}
+        >
           <div className="flex flex-col items-start gap-6">
             <img
-              src="/BPSDMLogo.webp"
+              src="/Logo_KM.png"
               alt="Logo"
               className="h-[38px] object-contain"
             />
-            <p className="w-[323px] text-sm">
-              Gedung Dinas Teknis Lantai 8 Jln. Abdul Muis No. 66 Kode
-              Pos 10160 Jakarta Pusat, Indonesia
-            </p>
+            <p className="w-[323px] text-sm">{data?.address}</p>
           </div>
 
           <div className="flex flex-col gap-4">
@@ -51,7 +136,7 @@ export default function Footer() {
                 width={16}
                 color={color.base.darkGray}
               />
-              <p>021-3865580 / 021-3865581</p>
+              <p>{data?.phoneNumber}</p>
             </div>
             <div className="flex items-center gap-2">
               <Icon
@@ -63,7 +148,7 @@ export default function Footer() {
                 href="mailto:bpsdmdkijakarta@gmail.com"
                 className="text-primary-main underline"
               >
-                bpsdmdkijakarta@gmail.com
+                {data?.email}
               </a>
             </div>
           </div>

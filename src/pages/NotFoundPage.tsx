@@ -16,7 +16,7 @@ function NotFoundPage() {
         <UnstyledButton>
           <a href="/">
             <img
-              src="/BPSDMLogo.webp"
+              src="/Logo_KM.png"
               alt="Logo"
               className="aspect-auto w-24 p-2"
             />

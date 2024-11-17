@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { Button, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
 export default function ForgotPassword() {
@@ -20,8 +20,6 @@ export default function ForgotPassword() {
       })
     ),
   });
-
-  const navigate = useNavigate();
 
   const handleSubmit = form.onSubmit(() => {
     setFetchError('');

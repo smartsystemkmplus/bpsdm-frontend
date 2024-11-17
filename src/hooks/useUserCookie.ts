@@ -12,8 +12,8 @@ export default function useUserCookie(): {
 } {
   const user = getUserCookie();
 
-  const initials = user?.employee.name
-    .split(' ')
+  const initials = user?.employee?.name
+    ?.split(' ')
     .map((namePart: string) => namePart[0])
     .join('');
 

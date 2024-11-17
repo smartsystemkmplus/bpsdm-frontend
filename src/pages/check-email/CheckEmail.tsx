@@ -13,8 +13,10 @@ const countdown = 60; // in seconds
 export default function CheckEmail() {
   const navigate = useNavigate();
   const [timer, setTimer] = useState(countdown);
-  const [isLoading, setIsLoading] = useState(false);
-  const [fetchError, setFetchError] = useState('');
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [fetchError, setFetchError] = useState('');
+  const isLoading = false;
+  const fetchError = '';
 
   const { state } = useLocation();
 

@@ -1,9 +1,12 @@
 type ParamID = string | number;
 
 export const BASE_PROXY = {
-  employees: '/api/employees/v1',
-  innovation: '/api/innovation/v1',
-  repository: '/api/repository/v1',
+  auth: '/api/auth',
+  employees: '/api/employees',
+  innovation: '/api/innovation',
+  repository: '/api/repository',
+  strapi: '/api/strapi',
+  gamification: '/api/gamification/v1',
 };
 
 export const EMPLOYEES_ENDPOINT = {
@@ -56,5 +59,33 @@ export const INNOVATION_ENDPOINT = {
 export const REPOSITORY_ENDPOINT = {
   POST: {
     file: '/file',
+  },
+};
+
+export const STRAPI_ENDPOINT = {
+  POST: {
+    subscriberEmail: '/api/subscriber-emails',
+  },
+  GET: {
+    footer: '/api/footer',
+    landingPage: '/api/landing-page',
+    blogs: '/api/blogs',
+    folders: '/api/categories',
+    podcasts: '/api/podcasts',
+    simdiklat: '/api/simdiklat',
+    carousel: '/api/landing-page-carousels',
+  },
+};
+
+export const AUTH_ENDPOINT = {
+  POST: {
+    login: '/auth/after-login',
+    logout: '/auth/logout',
+  },
+};
+
+export const GAMIFICATION_ENDPOINT = {
+  POST: {
+    dailyLogin: '/karma/login',
   },
 };

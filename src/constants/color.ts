@@ -4,7 +4,7 @@
 
 const color = {
   primary: {
-    main: '#016DB2',
+    main: '#014780',
     surface: '#C9F3FB',
     hover: '#005499',
     pressed: '#003F80',

@@ -1,6 +1,9 @@
 @import '@mantine/core/styles.css';
 @import '@mantine/dropzone/styles.css';
 @import 'mantine-datatable/styles.layer.css';
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
 
 @layer tailwind {
   @tailwind base;
@@ -39,6 +42,16 @@ body {
   color: #444;
 }
 
+ol {
+  padding-left: 1.25rem;
+  list-style-type: decimal;
+}
+
+ul {
+  padding-left: 1.25rem;
+  list-style-type: disc;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -75,8 +88,8 @@ body {
       background: white;
     }
     &[data-active='true'] {
-      color: #016db2;
-      border-color: #016db2;
+      color: #014780;
+      border-color: #014780;
     }
   }
 }
@@ -113,8 +126,8 @@ body {
   border: none;
   &[data-active='true'] {
     background: white;
-    color: #016db2;
-    border: 1px solid #016db2;
+    color: #014780;
+    border: 1px solid #014780;
   }
 }
 

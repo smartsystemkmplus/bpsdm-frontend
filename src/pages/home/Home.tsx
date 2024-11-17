@@ -1,183 +1,402 @@
 import BlogCard from '@components/Cards/BlogCard';
 import HomeLayout from '@components/Layouts/HomeLayout';
+import NoData from '@components/NoData';
 import ProfilePicture from '@components/ProfilePicture';
-import { Grid, Group, Stack } from '@mantine/core';
+import useNetworks, {
+  GenericQueryResponse,
+  StrapiData,
+} from '@hooks/useNetworks';
+import { Button, Grid, Loader, Skeleton, Stack } from '@mantine/core';
+import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  A11y,
+  Autoplay,
+  Navigation,
+  Pagination,
+} from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/bundle';
 
-interface HighlightBlogProps {
-  slug: string;
-  title: string;
-  description: string;
-  thumbnailUrl: string;
-}
-function HighlightBlog({
-  slug,
-  title,
-  description,
-  thumbnailUrl,
-}: HighlightBlogProps) {
-  return (
-    <a
-      href={`/km-news/${slug}`}
-      className="relative flex h-[480px] items-end rounded-md"
-    >
-      <img
-        alt="highlight"
-        src={thumbnailUrl}
-        className="absolute z-[1] h-[480px] w-full rounded-md object-cover"
-      />
-      <div className="z-[2] flex w-full flex-col gap-2 rounded-b-md bg-base-black/60 p-6 text-base-white">
-        <h3 className="line-clamp-1 break-all text-2xl font-semibold">
-          {title}
-        </h3>
-        <p className="line-clamp-1 break-all text-sm">
-          {description}
-        </p>
-      </div>
-    </a>
-  );
-}
+import {
+  BlogAttribute,
+  BlogListData,
+  CarouselAttribute,
+  CarouselListData,
+  LandingAttribute,
+  SimdiklatAttribute,
+} from './index.types';
+
+// interface HighlightBlogProps {
+//   slug?: string;
+//   title?: string;
+//   category?: string;
+//   content?: BlocksContent;
+//   thumbnailUrl?: string;
+// }
+// function HighlightBlog({
+//   slug,
+//   title,
+//   category,
+//   content,
+//   thumbnailUrl,
+// }: HighlightBlogProps) {
+//   return (
+//     <a
+//       href={
+//         category === 'Berita KM'
+//           ? `/km-news/${slug}`
+//           : `/knowledge-center/${slug}`
+//       }
+//       className="relative flex h-[480px] items-end rounded-md"
+//     >
+//       <img
+//         alt="highlight"
+//         src={thumbnailUrl}
+//         className="absolute z-[1] h-[480px] w-full rounded-md object-cover"
+//       />
+//       <div className="z-[2] flex w-full flex-col gap-2 rounded-b-md bg-base-black/60 p-6 text-base-white">
+//         <h3 className="line-clamp-1 break-all text-2xl font-semibold">
+//           {title}
+//         </h3>
+//         <p className="line-clamp-1 break-all text-sm">
+//           {!!content && (
+//             <BlocksRenderer
+//               content={shortenStrapiRTEContent(content)}
+//             />
+//           )}
+//         </p>
+//       </div>
+//     </a>
+//   );
+// }
 
 interface ProgramItemProps {
+  id: number;
   title: string;
   imageUrl?: string;
+  loading?: boolean;
 }
-function ProgramItem({ title, imageUrl }: ProgramItemProps) {
+function ProgramItem({
+  id,
+  title,
+  imageUrl,
+  loading,
+}: ProgramItemProps) {
+  const href = `/km-news?pod=${id}`;
   return (
     <Stack align="center">
-      <ProfilePicture
-        alt="title"
-        imageUrl={imageUrl}
-        name={title}
-        size={200}
-      />
-      <p className="font-bold">{title}</p>
+      {loading ? (
+        <Skeleton w={200} h={200} radius={100} />
+      ) : (
+        <Link to={href}>
+          <ProfilePicture
+            alt={title}
+            imageUrl={imageUrl}
+            name={title}
+            size={200}
+          />
+        </Link>
+      )}
+      {loading ? (
+        <Skeleton w={200} h={16} mb={9} />
+      ) : (
+        <Link to={href}>
+          <p className="font-bold hover:text-primary-main hover:underline">
+            {title}
+          </p>
+        </Link>
+      )}
     </Stack>
   );
 }
 
+const PAGE_SIZE = 6;
+
 export default function Home() {
-  const data = useMemo(() => {
-    return [
+  const { query } = useNetworks(BASE_PROXY.strapi);
+
+  const { data: dataLanding, isLoading: isLoadingLanding } = query<
+    GenericQueryResponse<StrapiData<LandingAttribute>>,
+    LandingAttribute
+  >(
+    STRAPI_ENDPOINT.GET.landingPage,
+    {
+      queryKey: ['landingPage'],
+      select: (res) => res?.data?.attributes,
+    },
+    {
+      params: {
+        populate: 'deep',
+      },
+    }
+  );
+
+  const { data: dataSimdiklat, isLoading: isLoadingSimdiklat } =
+    query<
+      GenericQueryResponse<StrapiData<SimdiklatAttribute>>,
+      SimdiklatAttribute
+    >(
+      STRAPI_ENDPOINT.GET.simdiklat,
       {
-        slug: 'introduction-to-knowledge-management',
-        category: 'Knowledge Management',
-        title: 'Introduction to Knowledge Management',
-        content: `<h1 style="font-size: 28px; color: #333; margin-bottom: 20px;">Introduction to Knowledge Management</h1><p>Knowledge Management (KM) is a discipline that focuses on leveraging an organization's collective knowledge to achieve its goals effectively. In today's rapidly evolving digital landscape, the ability to manage and harness knowledge has become a critical factor in maintaining competitiveness and innovation.</p><h2 style="font-size: 24px; color: #333; margin-bottom: 15px;">Understanding Knowledge Management</h2><p>At its core, Knowledge Management involves capturing, organizing, sharing, and utilizing knowledge and information within an organization. This includes explicit knowledge (documented information, databases) and tacit knowledge (personal insights, expertise) possessed by individuals.</p><h3 style="font-size: 20px; color: #333; margin-bottom: 10px;">Key Components of Knowledge Management:</h3><ul style="margin-bottom: 15px;"> <li><strong>Knowledge Creation:</strong> The process of generating new knowledge through research, development, and innovation.</li> <li><strong>Knowledge Capture:</strong> Systematic gathering and documenting of knowledge from various sources within the organization.</li> <li><strong>Knowledge Sharing:</strong> Facilitating the exchange of knowledge among employees to enhance collaboration and decision-making.</li> <li><strong>Knowledge Storage:</strong> Effective management of repositories, databases, and platforms to store and retrieve knowledge assets.</li> <li><strong>Knowledge Application:</strong> Applying knowledge to solve problems, make decisions, and create value for the organization.</li></ul><h2 style="font-size: 24px; color: #333; margin-bottom: 15px;">Importance of Knowledge Management</h2><p>Implementing a robust Knowledge Management strategy offers several benefits:</p><ul style="margin-bottom: 15px;"> <li><strong>Enhanced Decision Making:</strong> Access to relevant and timely information improves decision-making processes across all levels of the organization.</li> <li><strong>Increased Innovation:</strong> Encourages creativity and innovation by leveraging existing knowledge and fostering a culture of continuous learning.</li> <li><strong>Improved Efficiency:</strong> Reduces redundancy, avoids reinventing the wheel, and promotes best practices within the organization.</li> <li><strong>Better Customer Service:</strong> Enables employees to access information quickly, leading to better customer responsiveness and satisfaction.</li></ul><h2 style="font-size: 24px; color: #333; margin-bottom: 15px;">Challenges in Knowledge Management</h2><p>Despite its benefits, KM faces challenges such as:</p><ul style="margin-bottom: 15px;"> <li><strong>Culture and Adoption:</strong> Resistance to change and lack of participation in knowledge-sharing initiatives.</li> <li><strong>Technology Integration:</strong> Ensuring seamless integration of KM tools and platforms with existing systems.</li> <li><strong>Knowledge Validation:</strong> Ensuring the accuracy and relevance of knowledge shared across the organization.</li></ul><h2 style="font-size: 24px; color: #333; margin-bottom: 15px;">Future Trends in Knowledge Management</h2><p>Looking ahead, the future of Knowledge Management is poised for exciting developments:</p><ul style="margin-bottom: 15px;"> <li><strong>Artificial Intelligence (AI):</strong> AI-powered analytics and knowledge extraction tools will enhance the efficiency of knowledge discovery and decision support.</li> <li><strong>Blockchain Technology:</strong> Securing and validating knowledge transactions and intellectual property rights.</li> <li><strong>Remote Workforce:</strong> Facilitating KM in distributed teams through virtual collaboration tools and platforms.</li></ul><h2 style="font-size: 24px; color: #333; margin-bottom: 15px;">Conclusion</h2><p>In conclusion, Knowledge Management is a strategic approach that empowers organizations to harness their intellectual capital effectively. By investing in KM practices, organizations can unlock new opportunities for growth, innovation, and competitive advantage in today's knowledge-driven economy.</p>`,
-        createdAt: '2023-05-15T10:30:00Z',
-        thumbnailUrl:
-          'https://image.cnbcfm.com/api/v1/image/107032274-1647540069295-gettyimages-1084167640-2018_10_13-n1_office_0312.jpeg?v=1647540545',
+        queryKey: ['simdiklat'],
+        select: (res) => res?.data?.attributes,
       },
       {
-        slug: 'knowledge-management-strategies',
-        category: 'Knowledge Management',
-        title: 'Effective Strategies for Knowledge Management',
-        content:
-          'Exploring proven strategies to enhance knowledge sharing and retention.',
-        createdAt: '2023-06-02T14:15:00Z',
-        thumbnailUrl:
-          'https://images.inc.com/uploaded_files/image/1920x1080/getty_1084171152_400165.jpg',
+        params: {
+          populate: 'deep',
+        },
+      }
+    );
+
+  const { data: dataCarousel, isLoading: isLoadingCarousel } = query<
+    GenericQueryResponse<StrapiData<CarouselAttribute>[]>,
+    CarouselListData
+  >(
+    STRAPI_ENDPOINT.GET.carousel,
+    {
+      queryKey: ['carousel'],
+      select: (res) => ({
+        items: res?.data?.map((d) => d?.attributes),
+        pagination: res!.meta!.pagination!,
+      }),
+    },
+    {
+      params: {
+        populate: 'deep',
       },
-      {
-        slug: 'tools-for-knowledge-management',
-        category: 'Knowledge Management',
-        title: 'Top Tools for Knowledge Management',
-        content:
-          'A review of essential tools that facilitate effective knowledge management.',
-        createdAt: '2023-06-20T09:45:00Z',
-        thumbnailUrl:
-          'https://images.inc.com/uploaded_files/image/1920x1080/getty_1084171152_400165.jpg',
+    }
+  );
+
+  // const dataHighlightedBlog = useMemo(() => {
+  //   if (dataLanding) {
+  //     return dataLanding?.highlightedBlog?.data?.attributes;
+  //   }
+  //   return null;
+  // }, [dataLanding]);
+
+  const dataBanner = useMemo(() => {
+    if (dataLanding) {
+      return dataLanding?.banner?.data?.attributes;
+    }
+    return null;
+  }, [dataLanding]);
+
+  const dataHighlightedPodcast = useMemo(() => {
+    if (dataLanding) {
+      return dataLanding?.highlightedPodcasts?.data?.map(
+        (podcast) => ({
+          id: podcast.id,
+          ...podcast.attributes,
+        })
+      );
+    }
+    return null;
+  }, [dataLanding]);
+
+  const { data, isLoading } = query<
+    GenericQueryResponse<StrapiData<BlogAttribute>[]>,
+    BlogListData
+  >(
+    STRAPI_ENDPOINT.GET.blogs,
+    {
+      queryKey: ['blogs-home'],
+      select: (res) => ({
+        blogs: res?.data?.map((d) => d?.attributes),
+        pagination: res!.meta!.pagination!,
+      }),
+    },
+    {
+      params: {
+        populate: 'deep',
+        sort: 'publishedAt:desc',
+        'pagination[page]': 1,
+        'pagination[pageSize]': PAGE_SIZE,
       },
-      {
-        slug: 'importance-of-knowledge-sharing',
-        category: 'Knowledge Management',
-        title: 'The Importance of Knowledge Sharing',
-        content:
-          'Why fostering a culture of knowledge sharing is crucial for organizational success.',
-        createdAt: '2023-07-01T11:00:00Z',
-        thumbnailUrl:
-          'https://images.inc.com/uploaded_files/image/1920x1080/getty_1084171152_400165.jpg',
-      },
-      {
-        slug: 'knowledge-management-best-practices',
-        category: 'Knowledge Management',
-        title: 'Best Practices in Knowledge Management',
-        content:
-          'Key practices to optimize knowledge management processes and outcomes.',
-        createdAt: '2023-07-15T16:20:00Z',
-        thumbnailUrl:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3N7_J_xA2t6ClUygKAgGZmCpYUW4ugjRyIQ&s',
-      },
-      {
-        slug: 'future-trends-in-knowledge-management',
-        category: 'Knowledge Management',
-        title: 'Future Trends in Knowledge Management',
-        content:
-          'Predicting upcoming trends that will shape the future of knowledge management.',
-        createdAt: '2023-08-05T13:45:00Z',
-        thumbnailUrl:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAL7g5PUkbD7oeDQ92Qy2HoI2JIVJ-sDmTcQ&s',
-      },
-    ];
-  }, []);
+    }
+  );
 
   const gridSpan = useMemo(() => {
-    if (data.length === 1) return 12;
-    if (data.length === 2) return 6;
+    if (!data) return 12;
+    if (data.blogs.length === 1) return 12;
+    if (data.blogs.length === 2) return 6;
     return 4;
   }, [data]);
 
+  const podcastGridSpan = useMemo(() => {
+    if (!dataHighlightedPodcast) return 5;
+    return 1;
+  }, [dataHighlightedPodcast]);
+
   return (
-    <HomeLayout>
+    <HomeLayout className="px-0">
       <div className="flex flex-col gap-12">
-        <img
-          alt="hero-banner"
-          src="/HomeHeroBanner.png"
-          className="rounded-md border"
-        />
-
-        <HighlightBlog
-          slug="slug-here"
-          title="Knowledge Management Session - Ruth Naibaho"
-          description="Selamat datang di session knowledge management bersama BPSDM Prov DKI Jakarta. Kali ini kita kedatangan ibu Ruth Naibaho sekretaris kelurahan pengadengan"
-          thumbnailUrl="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg"
-        />
-
-        <section className="flex flex-col gap-6">
-          <Grid gutter={24}>
-            {data.map((blog) => (
-              <Grid.Col span={gridSpan}>
-                <BlogCard
-                  key={blog.slug}
-                  slug={blog.slug}
-                  category={blog.category}
-                  title={blog.title}
-                  content={blog.content}
-                  createdAt={blog.createdAt}
-                  thumbnailUrl={blog.thumbnailUrl}
-                />
-              </Grid.Col>
-            ))}
-          </Grid>
-
-          <Link
-            to="/km-news"
-            className="text-center text-primary-main"
-          >
-            Lihat Semua
-          </Link>
+        <section className="px-16">
+          {isLoadingLanding ? (
+            <Skeleton h={152} />
+          ) : (
+            <img
+              alt="hero-banner"
+              src={dataBanner?.url}
+              className="aspect-[16/2] w-full rounded-md border"
+            />
+          )}
         </section>
 
-        <section className="mt-[72px] flex flex-col gap-[72px]">
-          <h2 className="text-center text-2xl font-bold">
-            Program Knowledge Sharing
+        <section className="px-16">
+          {isLoadingCarousel ? (
+            <Skeleton h={480} />
+          ) : (
+            <Swiper
+              modules={[Navigation, Pagination, A11y, Autoplay]}
+              spaceBetween={50}
+              slidesPerView={1}
+              loop
+              pagination={{ clickable: true }}
+              navigation
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: true,
+              }}
+            >
+              {dataCarousel?.items?.map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <SwiperSlide key={`carousel-${i}`}>
+                  <a
+                    href={item?.url}
+                    className="flex aspect-[3/1] items-end rounded-md"
+                  >
+                    <img
+                      alt="thumbnail"
+                      src={
+                        item?.image?.data?.attributes?.previewUrl ||
+                        item?.image?.data?.attributes?.url
+                      }
+                      className="aspect-[3/1] w-full rounded-md object-cover"
+                    />
+                  </a>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            // <HighlightBlog
+            //   slug={dataHighlightedBlog?.slug}
+            //   title={dataHighlightedBlog?.title}
+            //   category={
+            //     dataHighlightedBlog?.category?.data?.attributes?.name
+            //   }
+            //   content={dataHighlightedBlog?.content}
+            //   thumbnailUrl={
+            //     dataHighlightedBlog?.thumbnail_large?.data?.attributes
+            //       ?.url ||
+            //     dataHighlightedBlog?.thumbnail?.data?.attributes?.url
+            //   }
+            // />
+          )}
+        </section>
+
+        <section className="grid grid-cols-3 items-center">
+          <div className="h-4 bg-primary-main" />
+          <h2 className="text-center text-2xl font-bold text-primary-main">
+            Berita dan Asset Pengetahuan
           </h2>
-          <Group justify="space-evenly">
-            <ProgramItem title="Podcast Rabu Belajar" />
-            <ProgramItem title="Kopi Sedap BPKD" />
-            <ProgramItem title="Webinar Series" />
-          </Group>
+          <div className="h-4 bg-primary-main" />
+        </section>
+
+        <section className="flex flex-col gap-6 px-16">
+          <Grid gutter={24}>
+            {isLoading ? (
+              <>
+                <Grid.Col span={4}>
+                  <Skeleton h={376} />
+                </Grid.Col>
+                <Grid.Col span={4}>
+                  <Skeleton h={376} />
+                </Grid.Col>
+                <Grid.Col span={4}>
+                  <Skeleton h={376} />
+                </Grid.Col>
+              </>
+            ) : (
+              data?.blogs.map((blog) => (
+                <Grid.Col key={blog.slug} span={gridSpan}>
+                  <BlogCard
+                    slug={blog.slug}
+                    category={blog.category.data.attributes.name}
+                    title={blog.title}
+                    content={blog.content}
+                    createdAt={blog.createdAt}
+                    thumbnailUrl={blog.thumbnail.data.attributes.url}
+                  />
+                </Grid.Col>
+              ))
+            )}
+          </Grid>
+
+          {(data?.pagination?.total || 0) > PAGE_SIZE && (
+            <Link to="/km-news" className="text-center">
+              <Button className="w-full">Lihat Semua</Button>
+            </Link>
+          )}
+        </section>
+
+        <section className="grid grid-cols-3 items-center">
+          <div className="h-4 bg-primary-main" />
+          <h2 className="text-center text-2xl font-bold text-primary-main">
+            Pembelajaran Mandiri
+          </h2>
+          <div className="h-4 bg-primary-main" />
+        </section>
+
+        <section className="mt-[72px] flex flex-col gap-[72px] px-16">
+          <Grid gutter={24} columns={5} className="mx-auto">
+            {(() => {
+              if (isLoadingLanding) {
+                return <Loader className="mx-auto" />;
+              }
+
+              if (dataHighlightedPodcast?.length) {
+                return dataHighlightedPodcast?.map((p) => (
+                  <Grid.Col span={podcastGridSpan}>
+                    <ProgramItem
+                      id={p.id}
+                      title={p.name}
+                      imageUrl={p.thumbnail.data.attributes.url}
+                    />
+                  </Grid.Col>
+                ));
+              }
+
+              return <NoData label="Tidak ditemukan" />;
+            })()}
+          </Grid>
+        </section>
+
+        <section className="grid grid-cols-3 items-center">
+          <div className="h-4 bg-primary-main" />
+          <h2 className="text-center text-2xl font-bold text-primary-main">
+            SIMDIKLAT
+          </h2>
+          <div className="h-4 bg-primary-main" />
+        </section>
+
+        <section className="flex items-center justify-center gap-[72px] px-16">
+          {isLoadingSimdiklat ? (
+            <Skeleton w={200} h={120} />
+          ) : (
+            <a href={dataSimdiklat?.url}>
+              <img
+                alt="simdiklat"
+                src={
+                  dataSimdiklat?.thumbnail?.data?.attributes
+                    ?.previewUrl ||
+                  dataSimdiklat?.thumbnail?.data?.attributes?.url
+                }
+                className="h-[120px]"
+              />
+            </a>
+          )}
         </section>
       </div>
     </HomeLayout>

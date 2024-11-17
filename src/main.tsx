@@ -11,7 +11,6 @@ import {
 } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
@@ -21,6 +20,8 @@ import {
 
 import './index.css';
 
+import AuthRoute from './AuthRoute';
+import DailyLogin from './DailyLogin';
 import NotFoundPage from './pages/NotFoundPage';
 
 dayjs.extend(relativeTime);
@@ -37,16 +38,21 @@ const router = createBrowserRouter([
         element: <Navigate to="/home" />,
       },
       {
-        path: '/login',
-        element: <Login />,
-      },
-      {
-        path: '/forgot-password',
-        element: <ForgotPassword />,
-      },
-      {
-        path: '/check-email',
-        element: <CheckEmail />,
+        element: <AuthRoute />,
+        children: [
+          {
+            path: '/login',
+            element: <Login />,
+          },
+          {
+            path: '/forgot-password',
+            element: <ForgotPassword />,
+          },
+          {
+            path: '/check-email',
+            element: <CheckEmail />,
+          },
+        ],
       },
       {
         path: '/home',
@@ -54,10 +60,18 @@ const router = createBrowserRouter([
       },
       {
         path: '/km-news',
-        element: <KMNews />,
+        element: <KMNews category="Berita KM" />,
       },
       {
         path: '/km-news/:slug',
+        element: <NewsDetail category="Berita KM" />,
+      },
+      {
+        path: '/knowledge-center',
+        element: <KMNews />,
+      },
+      {
+        path: '/knowledge-center/:slug',
         element: <NewsDetail />,
       },
     ],
@@ -66,9 +80,10 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <DailyLogin />
+    <RouterProvider router={router} />
+  </QueryClientProvider>
+  // </React.StrictMode>
 );
