@@ -26,8 +26,8 @@ export default function BlogCard({
     <a
       href={
         category === 'Berita KM'
-          ? `/km-news/${slug}`
-          : `/knowledge-center/${slug}`
+          ? `/landing/km-news/${slug}`
+          : `/landing/knowledge-center/${slug}`
       }
       className="relative flex h-fit min-h-[376px] flex-col gap-3"
     >

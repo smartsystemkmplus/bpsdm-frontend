@@ -14,7 +14,7 @@ function NotFoundPage() {
     <Providers>
       <main className="flex min-h-screen flex-col bg-base-white px-20 py-12">
         <UnstyledButton>
-          <a href="/">
+          <a href="/landing">
             <img
               src="/Logo_KM.png"
               alt="Logo"

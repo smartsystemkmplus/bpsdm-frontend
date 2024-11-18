@@ -29,49 +29,49 @@ dayjs.locale('id');
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/landing',
     element: <Layout />,
     errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
-        element: <Navigate to="/home" />,
+        element: <Navigate to="/landing/home" />,
       },
       {
         element: <AuthRoute />,
         children: [
           {
-            path: '/login',
+            path: 'login',
             element: <Login />,
           },
           {
-            path: '/forgot-password',
+            path: 'forgot-password',
             element: <ForgotPassword />,
           },
           {
-            path: '/check-email',
+            path: 'check-email',
             element: <CheckEmail />,
           },
         ],
       },
       {
-        path: '/home',
+        path: 'home',
         element: <Home />,
       },
       {
-        path: '/km-news',
+        path: 'km-news',
         element: <KMNews category="Berita KM" />,
       },
       {
-        path: '/km-news/:slug',
+        path: 'km-news/:slug',
         element: <NewsDetail category="Berita KM" />,
       },
       {
-        path: '/knowledge-center',
+        path: 'knowledge-center',
         element: <KMNews />,
       },
       {
-        path: '/knowledge-center/:slug',
+        path: 'knowledge-center/:slug',
         element: <NewsDetail />,
       },
     ],
