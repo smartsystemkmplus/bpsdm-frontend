@@ -48,7 +48,7 @@ export default function NewsDetail({
     () => [
       {
         title: category,
-        href: '/landing/km-news',
+        href: '/km-news',
       },
       {
         title: data?.title || '...',
@@ -59,7 +59,7 @@ export default function NewsDetail({
   );
 
   if (!isLoading && !data) {
-    return <Navigate to="/landing/404" replace />;
+    return <Navigate to="/404" replace />;
   }
 
   return (

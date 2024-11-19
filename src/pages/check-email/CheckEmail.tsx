@@ -46,12 +46,12 @@ export default function CheckEmail() {
     return () => clearInterval(intervalId);
   }, [timer]);
 
-  if (!state) return <Navigate to="/landing/login" replace />;
+  if (!state) return <Navigate to="/login" replace />;
 
   return (
     <div className="flex w-full flex-col gap-16">
       <div className="flex flex-col items-start gap-2">
-        <Link to="/landing/login" className="mb-5">
+        <Link to="/login" className="mb-5">
           <button
             type="button"
             className="flex items-center gap-1 text-base-darkGray"
@@ -85,7 +85,7 @@ export default function CheckEmail() {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => navigate('/landing/login')}
+            onClick={() => navigate('/login')}
           >
             Kembali ke halaman login
           </Button>

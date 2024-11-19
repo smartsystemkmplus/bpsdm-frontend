@@ -85,7 +85,7 @@ function ProgramItem({
   imageUrl,
   loading,
 }: ProgramItemProps) {
-  const href = `/landing/km-news?pod=${id}`;
+  const href = `/km-news?pod=${id}`;
   return (
     <Stack align="center">
       {loading ? (
@@ -335,7 +335,7 @@ export default function Home() {
           </Grid>
 
           {(data?.pagination?.total || 0) > PAGE_SIZE && (
-            <Link to="/landing/km-news" className="text-center">
+            <Link to="/km-news" className="text-center">
               <Button className="w-full">Lihat Semua</Button>
             </Link>
           )}

@@ -77,7 +77,7 @@ export default function Login() {
               .post(GAMIFICATION_ENDPOINT.POST.dailyLogin, {
                 headers: { Authorization: `Bearer ${token}` },
               })
-              .then(() => navigate('/landing/home'));
+              .then(() => navigate('/home'));
           })
           .catch((err) => {
             if (err.name === 'FirebaseError') {
@@ -103,7 +103,7 @@ export default function Login() {
       <div className="flex size-full items-center justify-center">
         <div className="flex w-full flex-col gap-16">
           <div className="flex flex-col items-center gap-2">
-            <Link to="/landing/home">
+            <Link to="/home">
               <img
                 src="/Logo_KM.png"
                 alt="company_logo"
@@ -152,7 +152,7 @@ export default function Login() {
 
               <div className="flex items-center justify-between">
                 <Link
-                  to="/landing/forgot-password"
+                  to="/forgot-password"
                   className="text-base font-semibold text-primary-main"
                 >
                   Forgot password?

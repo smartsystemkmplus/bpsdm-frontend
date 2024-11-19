@@ -34,7 +34,7 @@ export default function ForgotPassword() {
     <AuthLayout>
       <div className="flex w-full flex-col gap-16">
         <div className="flex flex-col items-start gap-2">
-          <Link to="/landing/login" className="mb-5">
+          <Link to="/login" className="mb-5">
             <button
               type="button"
               className="flex items-center gap-1 text-base-darkGray"

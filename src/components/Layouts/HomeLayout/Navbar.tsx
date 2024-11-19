@@ -28,7 +28,7 @@ export default function Navbar() {
   return (
     <nav className="flex items-center justify-between px-4 py-2 shadow-navbar">
       <div className="flex  items-center gap-4">
-        <a href="/landing/home" className="mr-2">
+        <a href="/home" className="mr-2">
           <img
             src="/Logo_KM.png"
             alt="Logo"
@@ -37,19 +37,19 @@ export default function Navbar() {
         </a>
 
         <Link
-          to="/landing/home"
+          to="/home"
           className="font-semibold text-secondary-pressed"
         >
           Home
         </Link>
         <Link
-          to="/landing/km-news"
+          to="/km-news"
           className="font-semibold text-secondary-pressed"
         >
           Berita KM
         </Link>
         <Link
-          to="/landing/knowledge-center"
+          to="/knowledge-center"
           className="font-semibold text-secondary-pressed"
         >
           Knowledge Center
@@ -107,7 +107,7 @@ export default function Navbar() {
           </Menu>
         </Group>
       ) : (
-        <Link to="/landing/login">
+        <Link to="/login">
           <Button color={color.secondary.main}>Login</Button>
         </Link>
       )}

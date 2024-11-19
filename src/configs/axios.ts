@@ -35,7 +35,7 @@ function addResponseInterceptor(axiosClient: AxiosInstance) {
     (response) => response,
     (error: AxiosError) => {
       if (error?.response?.status === 401) {
-        window.location.href = '/landing';
+        window.location.href = '/';
       }
       // eslint-disable-next-line no-console
       console.error(
