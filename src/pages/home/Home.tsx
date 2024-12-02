@@ -330,6 +330,13 @@ export default function Home() {
                     content={blog.content}
                     createdAt={blog.createdAt}
                     thumbnailUrl={blog.thumbnail.data.attributes.url}
+                    folder={
+                      blog?.subFolder?.data?.attributes?.folder?.data
+                        ?.attributes?.name
+                    }
+                    subFolder={
+                      blog?.subFolder?.data?.attributes?.name
+                    }
                   />
                 </Grid.Col>
               ))

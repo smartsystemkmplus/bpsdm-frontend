@@ -13,6 +13,8 @@ interface BlogCardProps {
   /** Date formatted in ISO String. */
   createdAt: string;
   thumbnailUrl: string;
+  folder?: string;
+  subFolder?: string;
 }
 export default function BlogCard({
   slug,
@@ -21,6 +23,8 @@ export default function BlogCard({
   content,
   createdAt,
   thumbnailUrl,
+  folder,
+  subFolder,
 }: BlogCardProps) {
   return (
     <a
@@ -44,7 +48,12 @@ export default function BlogCard({
         loading="lazy"
       />
       <p className="text-sm font-semibold text-primary-main">
-        {category}
+        {(() => {
+          if (folder || subFolder) {
+            return `${folder || ''} - ${subFolder || ''}`;
+          }
+          return category;
+        })()}
       </p>
       <p className="line-clamp-2 font-bold">{title}</p>
       <div className="line-clamp-2 [&>*]:!text-sm [&>*]:!font-normal">

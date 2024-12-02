@@ -54,6 +54,26 @@ export interface BlogCategory {
   data: StrapiData<BlogCategoryAttribute>;
 }
 
+export interface BlogFolderAttribute {
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+export interface BlogFolder {
+  data: StrapiData<BlogFolderAttribute>;
+}
+export interface BlogSubFolderAttribute {
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  folder: BlogFolder;
+}
+export interface BlogSubFolder {
+  data: StrapiData<BlogSubFolderAttribute>;
+}
+
 export interface BlogAttribute {
   content: BlocksContent;
   category: BlogCategory;
@@ -61,6 +81,7 @@ export interface BlogAttribute {
   slug: string;
   thumbnail: Media;
   thumbnail_large: Media;
+  subFolder: BlogSubFolder;
   /** Formatted in ISO String */
   createdAt: string;
   /** Formatted in ISO String */
