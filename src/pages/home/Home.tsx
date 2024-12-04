@@ -351,6 +351,7 @@ export default function Home() {
                     subFolder={
                       blog?.subFolder?.data?.attributes?.name
                     }
+                    subFolderIds={[blog?.subFolder?.data?.id]}
                   />
                 </Grid.Col>
               ))

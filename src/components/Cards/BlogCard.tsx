@@ -15,6 +15,7 @@ interface BlogCardProps {
   thumbnailUrl: string;
   folder?: string;
   subFolder?: string;
+  subFolderIds?: number[];
 }
 export default function BlogCard({
   slug,
@@ -25,7 +26,26 @@ export default function BlogCard({
   thumbnailUrl,
   folder,
   subFolder,
+  subFolderIds,
 }: BlogCardProps) {
+  const categoryLabel = (() => {
+    if (folder || subFolder) {
+      return `${folder || ''} - ${subFolder || ''}`;
+    }
+    return category;
+  })();
+
+  const categoryHref = (() => {
+    const idCount = subFolderIds?.length || 0;
+    if (idCount === 1) {
+      return `/knowledge-center?f=${subFolderIds![0]}`;
+    }
+    if (idCount > 1) {
+      return `/knowledge-center?f=parent-${subFolderIds!.join(',')}`;
+    }
+    return undefined;
+  })();
+
   return (
     <a
       href={
@@ -47,14 +67,18 @@ export default function BlogCard({
         className="absolute z-[1] aspect-[10/5] w-full object-cover"
         loading="lazy"
       />
-      <p className="text-sm font-semibold text-primary-main">
-        {(() => {
-          if (folder || subFolder) {
-            return `${folder || ''} - ${subFolder || ''}`;
-          }
-          return category;
-        })()}
-      </p>
+      {folder || subFolder ? (
+        <a
+          href={categoryHref}
+          className="text-sm font-semibold text-primary-main"
+        >
+          {categoryLabel}
+        </a>
+      ) : (
+        <p className="text-sm font-semibold text-primary-main">
+          {categoryLabel}
+        </p>
+      )}
       <p className="line-clamp-2 font-bold">{title}</p>
       <div className="line-clamp-2 [&>*]:!text-sm [&>*]:!font-normal">
         <BlocksRenderer content={shortenStrapiRTEContent(content)} />

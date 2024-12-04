@@ -237,6 +237,7 @@ export default function KMNews({
                     ?.attributes?.name
                 }
                 subFolder={blog?.subFolder?.data?.attributes?.name}
+                subFolderIds={[blog?.subFolder?.data?.id]}
               />
             </Grid.Col>
           ))}
