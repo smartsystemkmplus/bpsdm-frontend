@@ -323,11 +323,20 @@ export default function Home() {
                 <Grid.Col key={blog.slug} span={gridSpan}>
                   <BlogCard
                     slug={blog.slug}
-                    category={blog.category.data.attributes.name}
+                    category={
+                      blog?.category?.data?.attributes?.name || '-'
+                    }
                     title={blog.title}
                     content={blog.content}
                     createdAt={blog.createdAt}
                     thumbnailUrl={blog.thumbnail.data.attributes.url}
+                    folder={
+                      blog?.subFolder?.data?.attributes?.folder?.data
+                        ?.attributes?.name
+                    }
+                    subFolder={
+                      blog?.subFolder?.data?.attributes?.name
+                    }
                   />
                 </Grid.Col>
               ))
