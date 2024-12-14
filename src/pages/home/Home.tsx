@@ -8,7 +8,7 @@ import useNetworks, {
 } from '@hooks/useNetworks';
 import { Button, Grid, Loader, Skeleton, Stack } from '@mantine/core';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   A11y,
@@ -116,6 +116,9 @@ function ProgramItem({
 const PAGE_SIZE = 6;
 
 export default function Home() {
+  const [page, setPage] = useState(1);
+  const [blogData, setBlogData] = useState<BlogAttribute[]>([]);
+
   const { query } = useNetworks(BASE_PROXY.strapi);
 
   const { data: dataLanding, isLoading: isLoadingLanding } = query<
@@ -196,23 +199,34 @@ export default function Home() {
     return null;
   }, [dataLanding]);
 
-  const { data, isLoading } = query<
+  const { data, isLoading, isFetching } = query<
     GenericQueryResponse<StrapiData<BlogAttribute>[]>,
     BlogListData
   >(
     STRAPI_ENDPOINT.GET.blogs,
     {
-      queryKey: ['blogs-home'],
+      queryKey: ['blogs-home', page],
       select: (res) => ({
         blogs: res?.data?.map((d) => d?.attributes),
         pagination: res!.meta!.pagination!,
       }),
+      onSuccess: (res) => {
+        const typedRes = res as GenericQueryResponse<
+          StrapiData<BlogAttribute>[]
+        >;
+        if (typedRes?.data?.length) {
+          setBlogData((prev) => [
+            ...prev,
+            ...typedRes.data.map((d) => d?.attributes),
+          ]);
+        }
+      },
     },
     {
       params: {
         populate: 'deep',
         sort: 'publishedAt:desc',
-        'pagination[page]': 1,
+        'pagination[page]': page,
         'pagination[pageSize]': PAGE_SIZE,
       },
     }
@@ -319,7 +333,7 @@ export default function Home() {
                 </Grid.Col>
               </>
             ) : (
-              data?.blogs.map((blog) => (
+              blogData.map((blog) => (
                 <Grid.Col key={blog.slug} span={gridSpan}>
                   <BlogCard
                     slug={blog.slug}
@@ -330,13 +344,6 @@ export default function Home() {
                     content={blog.content}
                     createdAt={blog.createdAt}
                     thumbnailUrl={blog.thumbnail.data.attributes.url}
-                    folder={
-                      blog?.subFolder?.data?.attributes?.folder?.data
-                        ?.attributes?.name
-                    }
-                    subFolder={
-                      blog?.subFolder?.data?.attributes?.name
-                    }
                   />
                 </Grid.Col>
               ))
@@ -344,9 +351,13 @@ export default function Home() {
           </Grid>
 
           {(data?.pagination?.total || 0) > PAGE_SIZE && (
-            <Link to="/km-news" className="text-center">
-              <Button className="w-full">Lihat Semua</Button>
-            </Link>
+            <Button
+              className="w-full"
+              loading={isFetching}
+              onClick={() => setPage((prev) => prev + 1)}
+            >
+              Lihat Lebih Banyak
+            </Button>
           )}
         </section>
 

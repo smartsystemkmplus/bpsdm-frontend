@@ -59,6 +59,7 @@ export interface BlogFolderAttribute {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
+  subFolders: { data: BlogSubFolderAttribute[] };
 }
 export interface BlogFolder {
   data: StrapiData<BlogFolderAttribute>;

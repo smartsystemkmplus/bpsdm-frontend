@@ -54,6 +54,12 @@ export default function Navbar() {
         >
           Knowledge Center
         </Link>
+        <a
+            href={'https://simdiklat-bpsdm.jakarta.go.id/sim-diklat/auth/login/simfoni'}
+            className="font-semibold text-secondary-pressed"
+          >
+            Simfoni
+          </a>
         {isAuthenticated && (
           <a
             href={`${import.meta.env.VITE_KMS_URL}`}
