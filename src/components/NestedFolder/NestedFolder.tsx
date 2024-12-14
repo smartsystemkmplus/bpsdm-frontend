@@ -2,6 +2,7 @@ import color from '@constants/color';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Accordion, Group } from '@mantine/core';
 import cn from '@utils/cn';
+import { useMemo } from 'react';
 
 export interface NestedFolderItem {
   activeValue?: string;
@@ -102,8 +103,16 @@ export default function NestedFolder({
   value,
   data = [],
 }: NestedFolderProps) {
+  const parentValue = useMemo(() => {
+    return data?.find((item) => {
+      const withoutParent = item?.value?.replace('parent-', '');
+      const splitted = withoutParent?.split(',');
+      return splitted?.includes(value || '');
+    })?.value;
+  }, [data, value]);
+
   return (
-    <Accordion>
+    <Accordion defaultValue={parentValue}>
       {data.map((item) => (
         <ItemRenderer
           key={item.value}
