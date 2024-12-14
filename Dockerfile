@@ -1,4 +1,4 @@
-FROM node:20.13-alpine AS builder
+FROM public.ecr.aws/docker/library/node:20.13-alpine AS builder
 WORKDIR /app
 COPY pnpm-lock.yaml package.json ./
 RUN npm i -g pnpm@9.0.6
