@@ -47,17 +47,34 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = form.onSubmit((values) => {
+  const handleSubmit = form.onSubmit(async (values) => {
     setFetchError('');
     setIsLoading(true);
 
     // Accommodate super login
     const isNotEmail = !z.string().email().safeParse(values.email)
       .success;
-    const nrkEmail = `${values.email}-bpsdm@gmail.com`;
+
+    let emailFromNRK = '';
+    if (isNotEmail) {
+      const reqBody = { nrk: values.email };
+      await axiosMainClient(baseURL(BASE_PROXY.auth))
+        .post(AUTH_ENDPOINT.POST.getEmailByNRK, reqBody)
+        .then((res) => {
+          emailFromNRK = res?.data?.data?.email as string;
+        })
+        .catch((err) => {
+          if (err.response?.data?.message === 'user not found') {
+            setFetchError('NRK not found');
+          } else {
+            setFetchError('Something went wrong');
+          }
+          setIsLoading(false);
+        });
+    }
 
     const [userEmail, targetUID] = isNotEmail
-      ? [nrkEmail, null]
+      ? [emailFromNRK, null]
       : values.email.split('-$$-');
 
     login(userEmail.toLowerCase().trim(), values.password)

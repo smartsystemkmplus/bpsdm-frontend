@@ -81,6 +81,7 @@ export const AUTH_ENDPOINT = {
   POST: {
     login: '/auth/after-login',
     logout: '/auth/logout',
+    getEmailByNRK: '/auth/nrk-login',
   },
 };
 
