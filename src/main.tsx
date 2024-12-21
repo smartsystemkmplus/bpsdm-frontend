@@ -6,6 +6,7 @@ import KMNews from '@pages/km-news/KMNews';
 import NewsDetail from '@pages/km-news/news-detail/NewsDetail';
 import Login from '@pages/login/Login';
 import NewsAndAssets from '@pages/news-and-assets/NewsAndAssets';
+import TermsOfService from '@pages/terms-of-service/TermsOfService';
 import {
   QueryClient,
   QueryClientProvider,
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: '/news-and-assets',
         element: <NewsAndAssets />,
+      },
+      {
+        path: '/terms-of-service',
+        element: <TermsOfService />,
       },
     ],
   },
