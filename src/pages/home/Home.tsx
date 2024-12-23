@@ -9,7 +9,7 @@ import useNetworks, {
 import { Button, Grid, Loader, Skeleton, Stack } from '@mantine/core';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   A11y,
   Autoplay,
@@ -116,7 +116,7 @@ function ProgramItem({
 const PAGE_SIZE = 6;
 
 export default function Home() {
-  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
   const [blogData, setBlogData] = useState<BlogAttribute[]>([]);
 
   const { query } = useNetworks(BASE_PROXY.strapi);
@@ -205,7 +205,7 @@ export default function Home() {
   >(
     STRAPI_ENDPOINT.GET.blogs,
     {
-      queryKey: ['blogs-home', page],
+      queryKey: ['blogs-home'],
       select: (res) => ({
         blogs: res?.data?.map((d) => d?.attributes),
         pagination: res!.meta!.pagination!,
@@ -226,7 +226,7 @@ export default function Home() {
       params: {
         populate: 'deep',
         sort: 'publishedAt:desc',
-        'pagination[page]': page,
+        'pagination[page]': 1,
         'pagination[pageSize]': PAGE_SIZE,
       },
     }
@@ -354,9 +354,9 @@ export default function Home() {
             <Button
               className="w-full"
               loading={isFetching}
-              onClick={() => setPage((prev) => prev + 1)}
+              onClick={() => navigate('/news-and-assets')}
             >
-              Lihat Lebih Banyak
+              Lihat Semua
             </Button>
           )}
         </section>

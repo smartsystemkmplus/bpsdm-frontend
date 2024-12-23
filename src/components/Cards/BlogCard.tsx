@@ -36,6 +36,13 @@ export default function BlogCard({
   })();
 
   const categoryHref = (() => {
+    if (!folder && !subFolder && !subFolderIds?.length) {
+      if (category === 'Knowledge Center') {
+        return '/knowledge-center';
+      }
+      return '/km-news';
+    }
+
     const idCount = subFolderIds?.length || 0;
     if (idCount === 1) {
       return `/knowledge-center?f=${subFolderIds![0]}`;
@@ -67,18 +74,14 @@ export default function BlogCard({
         className="absolute z-[1] aspect-[10/5] w-full object-cover"
         loading="lazy"
       />
-      {folder || subFolder ? (
-        <a
-          href={categoryHref}
-          className="text-sm font-semibold text-primary-main"
-        >
-          {categoryLabel}
-        </a>
-      ) : (
-        <p className="text-sm font-semibold text-primary-main">
-          {categoryLabel}
-        </p>
-      )}
+
+      <a
+        href={categoryHref}
+        className="text-sm font-semibold text-primary-main"
+      >
+        {categoryLabel}
+      </a>
+
       <p className="line-clamp-2 font-bold">{title}</p>
       <div className="line-clamp-2 [&>*]:!text-sm [&>*]:!font-normal">
         <BlocksRenderer content={shortenStrapiRTEContent(content)} />
