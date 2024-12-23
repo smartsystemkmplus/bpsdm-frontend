@@ -62,7 +62,7 @@ export default function Navbar() {
         </a>
         {isAuthenticated && (
           <a
-            href={`${import.meta.env.VITE_KMS_URL}`}
+            href={`${import.meta.env.VITE_KMS_URL}/dashboard`}
             className="font-semibold text-secondary-pressed"
           >
             KMS
