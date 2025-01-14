@@ -396,7 +396,7 @@ export default function Home() {
         <section className="grid grid-cols-3 items-center">
           <div className="h-4 bg-primary-main" />
           <h2 className="text-center text-2xl font-bold text-primary-main">
-            SIMDIKLAT
+            Link Terkait
           </h2>
           <div className="h-4 bg-primary-main" />
         </section>
