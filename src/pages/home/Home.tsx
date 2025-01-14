@@ -6,8 +6,17 @@ import useNetworks, {
   GenericQueryResponse,
   StrapiData,
 } from '@hooks/useNetworks';
-import { Button, Grid, Loader, Skeleton, Stack } from '@mantine/core';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import {
+  ActionIcon,
+  Button,
+  Grid,
+  Loader,
+  Skeleton,
+  Stack,
+} from '@mantine/core';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
+import cn from '@utils/cn';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -26,7 +35,8 @@ import {
   CarouselAttribute,
   CarouselListData,
   LandingAttribute,
-  SimdiklatAttribute,
+  OtherLinkAttribute,
+  OtherLinkListData,
 } from './index.types';
 
 // interface HighlightBlogProps {
@@ -137,15 +147,18 @@ export default function Home() {
     }
   );
 
-  const { data: dataSimdiklat, isLoading: isLoadingSimdiklat } =
+  const { data: dataOtherLinks, isLoading: isLoadingOtherLinks } =
     query<
-      GenericQueryResponse<StrapiData<SimdiklatAttribute>>,
-      SimdiklatAttribute
+      GenericQueryResponse<StrapiData<OtherLinkAttribute>[]>,
+      OtherLinkListData
     >(
-      STRAPI_ENDPOINT.GET.simdiklat,
+      STRAPI_ENDPOINT.GET.otherLinks,
       {
-        queryKey: ['simdiklat'],
-        select: (res) => res?.data?.attributes,
+        queryKey: ['otherLinks'],
+        select: (res) => ({
+          items: res?.data?.map((d) => d?.attributes),
+          pagination: res!.meta!.pagination!,
+        }),
       },
       {
         params: {
@@ -266,7 +279,11 @@ export default function Home() {
             <Swiper
               modules={[Navigation, Pagination, A11y, Autoplay]}
               spaceBetween={50}
-              slidesPerView={1}
+              slidesPerView={
+                (dataCarousel?.items?.length || 0) > 4
+                  ? 4
+                  : dataCarousel?.items?.length
+              }
               loop
               pagination={{ clickable: true }}
               navigation
@@ -401,21 +418,75 @@ export default function Home() {
           <div className="h-4 bg-primary-main" />
         </section>
 
-        <section className="flex items-center justify-center gap-[72px] px-16">
-          {isLoadingSimdiklat ? (
-            <Skeleton w={200} h={120} />
+        <section className="relative px-16">
+          {isLoadingOtherLinks ? (
+            <Skeleton h={480} />
           ) : (
-            <a href={dataSimdiklat?.url}>
-              <img
-                alt="simdiklat"
-                src={
-                  dataSimdiklat?.thumbnail?.data?.attributes
-                    ?.previewUrl ||
-                  dataSimdiklat?.thumbnail?.data?.attributes?.url
-                }
-                className="h-[120px]"
-              />
-            </a>
+            <>
+              <ActionIcon
+                id="other-link-swiper-prev"
+                radius="xl"
+                size="lg"
+                className="absolute inset-y-1/2 left-12 z-10"
+              >
+                <Icon
+                  icon="material-symbols:chevron-left"
+                  width={30}
+                />
+              </ActionIcon>
+
+              <Swiper
+                modules={[Navigation, A11y, Autoplay]}
+                spaceBetween={50}
+                slidesPerView={4}
+                navigation={{
+                  prevEl: '#other-link-swiper-prev',
+                  nextEl: '#other-link-swiper-next',
+                }}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: true,
+                }}
+                wrapperClass={cn(
+                  'items-center',
+                  (dataOtherLinks?.items?.length || 0) < 4
+                    ? 'flex justify-center gap-[50px]'
+                    : ''
+                )}
+              >
+                {dataOtherLinks?.items?.map((item, i) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <SwiperSlide key={`carousel-links-${i}`}>
+                    <a
+                      href={item?.url}
+                      className="flex aspect-[3/1] items-end rounded-md"
+                    >
+                      <img
+                        alt="thumbnail"
+                        src={
+                          item?.thumbnail?.data?.attributes
+                            ?.previewUrl ??
+                          item?.thumbnail?.data?.attributes?.url
+                        }
+                        className="w-[220px] rounded-md object-contain"
+                      />
+                    </a>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+              <ActionIcon
+                id="other-link-swiper-next"
+                radius="xl"
+                size="lg"
+                className="absolute inset-y-1/2 right-12 z-10"
+              >
+                <Icon
+                  icon="material-symbols:chevron-right"
+                  width={30}
+                />
+              </ActionIcon>
+            </>
           )}
         </section>
       </div>
