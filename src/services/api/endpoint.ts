@@ -74,6 +74,7 @@ export const STRAPI_ENDPOINT = {
     podcasts: '/api/podcasts',
     simdiklat: '/api/simdiklat',
     carousel: '/api/landing-page-carousels',
+    otherLinks: '/api/other-links',
   },
 };
 

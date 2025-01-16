@@ -158,3 +158,13 @@ export interface CarouselListData {
   items: CarouselAttribute[];
   pagination: StrapiPagination;
 }
+
+export interface OtherLinkAttribute {
+  thumbnail: Media;
+  url: string;
+}
+
+export interface OtherLinkListData {
+  items: OtherLinkAttribute[];
+  pagination: StrapiPagination;
+}
