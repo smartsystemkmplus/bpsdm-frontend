@@ -17,7 +17,7 @@ import {
 } from '@mantine/core';
 import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
 import cn from '@utils/cn';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   A11y,
@@ -127,7 +127,6 @@ const PAGE_SIZE = 6;
 
 export default function Home() {
   const navigate = useNavigate();
-  const [blogData, setBlogData] = useState<BlogAttribute[]>([]);
 
   const { query } = useNetworks(BASE_PROXY.strapi);
 
@@ -212,7 +211,11 @@ export default function Home() {
     return null;
   }, [dataLanding]);
 
-  const { data, isLoading, isFetching } = query<
+  const {
+    data: blogData,
+    isLoading,
+    isFetching,
+  } = query<
     GenericQueryResponse<StrapiData<BlogAttribute>[]>,
     BlogListData
   >(
@@ -223,17 +226,6 @@ export default function Home() {
         blogs: res?.data?.map((d) => d?.attributes),
         pagination: res!.meta!.pagination!,
       }),
-      onSuccess: (res) => {
-        const typedRes = res as GenericQueryResponse<
-          StrapiData<BlogAttribute>[]
-        >;
-        if (typedRes?.data?.length) {
-          setBlogData((prev) => [
-            ...prev,
-            ...typedRes.data.map((d) => d?.attributes),
-          ]);
-        }
-      },
     },
     {
       params: {
@@ -246,11 +238,11 @@ export default function Home() {
   );
 
   const gridSpan = useMemo(() => {
-    if (!data) return 12;
-    if (data.blogs.length === 1) return 12;
-    if (data.blogs.length === 2) return 6;
+    if (!blogData) return 12;
+    if (blogData.blogs.length === 1) return 12;
+    if (blogData.blogs.length === 2) return 6;
     return 4;
-  }, [data]);
+  }, [blogData]);
 
   const podcastGridSpan = useMemo(() => {
     if (!dataHighlightedPodcast) return 5;
@@ -350,24 +342,28 @@ export default function Home() {
                 </Grid.Col>
               </>
             ) : (
-              blogData.map((blog) => (
-                <Grid.Col key={blog.slug} span={gridSpan}>
-                  <BlogCard
-                    slug={blog.slug}
-                    category={
-                      blog?.category?.data?.attributes?.name || '-'
-                    }
-                    title={blog.title}
-                    content={blog.content}
-                    createdAt={blog.createdAt}
-                    thumbnailUrl={blog.thumbnail.data.attributes.url}
-                  />
-                </Grid.Col>
-              ))
+              ((blogData?.blogs || []) as BlogAttribute[]).map(
+                (blog) => (
+                  <Grid.Col key={blog.slug} span={gridSpan}>
+                    <BlogCard
+                      slug={blog.slug}
+                      category={
+                        blog?.category?.data?.attributes?.name || '-'
+                      }
+                      title={blog.title}
+                      content={blog.content}
+                      createdAt={blog.createdAt}
+                      thumbnailUrl={
+                        blog.thumbnail.data.attributes.url
+                      }
+                    />
+                  </Grid.Col>
+                )
+              )
             )}
           </Grid>
 
-          {(data?.pagination?.total || 0) > PAGE_SIZE && (
+          {(blogData?.pagination?.total || 0) > PAGE_SIZE && (
             <Button
               className="w-full"
               loading={isFetching}
