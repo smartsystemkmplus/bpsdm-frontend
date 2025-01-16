@@ -418,7 +418,7 @@ export default function Home() {
           <div className="h-4 bg-primary-main" />
         </section>
 
-        <section className="relative px-16">
+        <section className="relative px-28">
           {isLoadingOtherLinks ? (
             <Skeleton h={480} />
           ) : (
