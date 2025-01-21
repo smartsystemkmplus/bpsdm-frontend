@@ -455,7 +455,7 @@ export default function Home() {
                   <SwiperSlide key={`carousel-links-${i}`}>
                     <a
                       href={item?.url}
-                      className="flex aspect-[3/1] items-end rounded-md"
+                      className="flex aspect-[3/1] items-end justify-center rounded-md"
                     >
                       <img
                         alt="thumbnail"
