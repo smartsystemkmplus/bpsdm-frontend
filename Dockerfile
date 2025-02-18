@@ -18,7 +18,7 @@ ENV VITE_FIREBASE_MEASUREMENT_ID=G-YJHDFE0D04
 
 ENV VITE_API_AUTH_SERVICE_URL=https://km-bpsdm.jakarta.go.id
 ENV VITE_API_GAMIFICATION_SERVICE_URL=https://km-bpsdm.jakarta.go.id/gamification
-ENV VITE_API_STRAPI_SERVICE_URL=https://cms.bpsdm.kmplus.co.id
+ENV VITE_API_STRAPI_SERVICE_URL=https://km-bpsdm.jakarta.go.id/api
 ENV VITE_STRAPI_API_TOKEN=6c2d4c0902046b1279ddcf1d50665ee5b8c5c45bf0a54871c1833c62cb9c9890fd3b55db10ed1d23f6e08a317f5ed470b7688f347ef6dd27447be7472306bcfb84ebb5322672d85d2dace584ae1dd53434d286c9d9ad5c9f3de748f5c93c5899c37294d5000adcdb67b7f1ebd9bd4c46705fb945e3eda3c4da7d234c75ba825e
 
 ENV VITE_KMS_URL=https://km-bpsdm.jakarta.go.id/kms
