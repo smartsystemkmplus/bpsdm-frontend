@@ -15,7 +15,11 @@ import {
   Skeleton,
   Stack,
 } from '@mantine/core';
-import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
+import {
+  BASE_PROXY,
+  SEARCH_ENGINE_ENDPOINT,
+  STRAPI_ENDPOINT,
+} from '@services/api/endpoint';
 import cn from '@utils/cn';
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -129,6 +133,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const { query } = useNetworks(BASE_PROXY.strapi);
+  const { query: seQuery } = useNetworks(BASE_PROXY.searchEngine);
 
   const { data: dataLanding, isLoading: isLoadingLanding } = query<
     GenericQueryResponse<StrapiData<LandingAttribute>>,
@@ -215,11 +220,11 @@ export default function Home() {
     data: blogData,
     isLoading,
     isFetching,
-  } = query<
+  } = seQuery<
     GenericQueryResponse<StrapiData<BlogAttribute>[]>,
     BlogListData
   >(
-    STRAPI_ENDPOINT.GET.blogs,
+    SEARCH_ENGINE_ENDPOINT.GET.blogs,
     {
       queryKey: ['blogs-home'],
       select: (res) => ({
@@ -356,6 +361,7 @@ export default function Home() {
                       thumbnailUrl={
                         blog.thumbnail.data.attributes.url
                       }
+                      viewCount={blog?.view_count || 0}
                     />
                   </Grid.Col>
                 )
@@ -455,7 +461,7 @@ export default function Home() {
                   <SwiperSlide key={`carousel-links-${i}`}>
                     <a
                       href={item?.url}
-                      className="flex aspect-[3/1] items-end rounded-md"
+                      className="flex aspect-[3/1] items-end justify-center rounded-md"
                     >
                       <img
                         alt="thumbnail"

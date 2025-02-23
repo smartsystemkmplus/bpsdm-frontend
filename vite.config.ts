@@ -63,6 +63,13 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) =>
             path.replace(/^\/api\/gamification\/v1/, ''),
         },
+        '/api/search-engine/v1': {
+          target: process.env.VITE_API_SEARCH_ENGINE_SERVICE_URL,
+          changeOrigin: true,
+          secure: true,
+          rewrite: (path) =>
+            path.replace(/^\/api\/search-engine\/v1/, ''),
+        },
       },
     },
   };

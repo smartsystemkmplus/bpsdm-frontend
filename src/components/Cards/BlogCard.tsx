@@ -12,6 +12,7 @@ interface BlogCardProps {
   content: BlocksContent;
   /** Date formatted in ISO String. */
   createdAt: string;
+  viewCount: number;
   thumbnailUrl: string;
   folder?: string;
   subFolder?: string;
@@ -23,6 +24,7 @@ export default function BlogCard({
   title,
   content,
   createdAt,
+  viewCount,
   thumbnailUrl,
   folder,
   subFolder,
@@ -87,7 +89,8 @@ export default function BlogCard({
         <BlocksRenderer content={shortenStrapiRTEContent(content)} />
       </div>
       <p className="text-sm text-base-darkGray">
-        {dayjs(createdAt).format('D MMMM YYYY')}
+        {dayjs(createdAt).format('D MMMM YYYY')} | Dilihat {viewCount}{' '}
+        kali
       </p>
     </a>
   );

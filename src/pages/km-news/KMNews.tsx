@@ -17,7 +17,11 @@ import {
   PodcastAttribute,
   PodcastDetailData,
 } from '@pages/home/index.types';
-import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
+import {
+  BASE_PROXY,
+  SEARCH_ENGINE_ENDPOINT,
+  STRAPI_ENDPOINT,
+} from '@services/api/endpoint';
 import dayjs from 'dayjs';
 import { DataTable } from 'mantine-datatable';
 import { useEffect, useMemo, useState } from 'react';
@@ -90,14 +94,18 @@ export default function KMNews({
     return params;
   }, [blogFolderParam, category]);
 
-  const { query, infiniteQuery } = useNetworks(BASE_PROXY.strapi);
+  const { query } = useNetworks(BASE_PROXY.strapi);
+  const { infiniteQuery: seInfiniteQuery } = useNetworks(
+    BASE_PROXY.searchEngine
+  );
+
   const { data, isLoading, isFetchingNextPage } =
     useInfiniteQueryWrapper(
-      infiniteQuery<
+      seInfiniteQuery<
         GenericQueryResponse<StrapiData<BlogAttribute>[]>,
         BlogListData
       >(
-        STRAPI_ENDPOINT.GET.blogs,
+        SEARCH_ENGINE_ENDPOINT.GET.blogs,
         {
           queryKey: ['blogs-news', PAGE_SIZE, blogFilterParam],
           enabled: !podcastId,
@@ -238,6 +246,7 @@ export default function KMNews({
                 }
                 subFolder={blog?.subFolder?.data?.attributes?.name}
                 subFolderIds={[blog?.subFolder?.data?.id]}
+                viewCount={blog?.view_count || 0}
               />
             </Grid.Col>
           ))}
