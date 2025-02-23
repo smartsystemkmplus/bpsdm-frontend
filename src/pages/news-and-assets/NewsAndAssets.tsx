@@ -7,7 +7,10 @@ import useNetworks, {
 } from '@hooks/useNetworks';
 import { Grid, Pagination, Skeleton, Stack } from '@mantine/core';
 import { BlogAttribute, BlogListData } from '@pages/home/index.types';
-import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
+import {
+  BASE_PROXY,
+  SEARCH_ENGINE_ENDPOINT,
+} from '@services/api/endpoint';
 import { useEffect, useState } from 'react';
 
 function BlogsSkeleton() {
@@ -30,12 +33,12 @@ const PAGE_SIZE = 30;
 
 export default function NewsAndAssets() {
   const [page, setPage] = useState(1);
-  const { query } = useNetworks(BASE_PROXY.strapi);
+  const { query } = useNetworks(BASE_PROXY.searchEngine);
   const { data, isLoading } = query<
     GenericQueryResponse<StrapiData<BlogAttribute>[]>,
     BlogListData
   >(
-    STRAPI_ENDPOINT.GET.blogs,
+    SEARCH_ENGINE_ENDPOINT.GET.blogs,
     {
       queryKey: ['blogs-news-and-assets', PAGE_SIZE, page],
 
@@ -107,6 +110,7 @@ export default function NewsAndAssets() {
                         blog?.subFolder?.data?.attributes?.name
                       }
                       subFolderIds={[blog?.subFolder?.data?.id]}
+                      viewCount={blog?.view_count || 0}
                     />
                   </Grid.Col>
                 ))}

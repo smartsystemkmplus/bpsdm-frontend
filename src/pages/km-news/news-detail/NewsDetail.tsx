@@ -9,7 +9,10 @@ import useNetworks, {
 import { Loader, Stack } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { BlogAttribute } from '@pages/home/index.types';
-import { BASE_PROXY, STRAPI_ENDPOINT } from '@services/api/endpoint';
+import {
+  BASE_PROXY,
+  SEARCH_ENGINE_ENDPOINT,
+} from '@services/api/endpoint';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import getPathWithSearchParams from '@utils/getPathWithSearchParams';
 import { useMemo } from 'react';
@@ -25,20 +28,20 @@ export default function NewsDetail({
 }: NewsDetailProps) {
   const isMobileScreen = useMediaQuery('(max-width: 768px)');
   const { slug } = useParams();
-  const { query } = useNetworks(BASE_PROXY.strapi);
+  const { query } = useNetworks(BASE_PROXY.searchEngine);
 
   const { data, isLoading } = query<
     GenericQueryResponse<StrapiData<BlogAttribute>[]>,
     BlogAttribute
   >(
-    STRAPI_ENDPOINT.GET.blogs,
+    SEARCH_ENGINE_ENDPOINT.GET.blogDetail,
     {
-      queryKey: ['blog-detail'],
+      queryKey: ['blog-detail', slug],
       select: (res) => res?.data?.[0]?.attributes,
     },
     {
       params: {
-        'filters[slug][$eq]': slug,
+        slug,
         populate: 'deep',
       },
     }

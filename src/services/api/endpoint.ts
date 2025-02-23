@@ -7,6 +7,7 @@ export const BASE_PROXY = {
   repository: '/api/repository',
   strapi: '/api/strapi',
   gamification: '/api/gamification/v1',
+  searchEngine: '/api/search-engine/v1',
 };
 
 export const EMPLOYEES_ENDPOINT = {
@@ -89,5 +90,12 @@ export const AUTH_ENDPOINT = {
 export const GAMIFICATION_ENDPOINT = {
   POST: {
     dailyLogin: '/karma/login',
+  },
+};
+
+export const SEARCH_ENGINE_ENDPOINT = {
+  GET: {
+    blogs: '/strapi/blogs',
+    blogDetail: '/strapi/blog-detail',
   },
 };

@@ -76,6 +76,7 @@ export interface BlogSubFolder {
 }
 
 export interface BlogAttribute {
+  view_count?: number;
   content: BlocksContent;
   category: BlogCategory;
   title: string;
@@ -91,6 +92,7 @@ export interface BlogAttribute {
   updatedAt: string;
 }
 export interface Blog {
+  id: number;
   data: StrapiData<BlogAttribute>;
 }
 export interface BlogListData {
