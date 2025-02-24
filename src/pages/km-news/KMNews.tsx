@@ -239,7 +239,7 @@ export default function KMNews({
                 title={blog.title}
                 content={blog.content}
                 createdAt={blog.createdAt}
-                thumbnailUrl={blog.thumbnail?.data?.attributes?.url}
+                thumbnailUrl={blog?.thumbnail?.data?.attributes?.url}
                 folder={
                   blog?.subFolder?.data?.attributes?.folder?.data
                     ?.attributes?.name

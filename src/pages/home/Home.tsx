@@ -359,7 +359,7 @@ export default function Home() {
                       content={blog.content}
                       createdAt={blog.createdAt}
                       thumbnailUrl={
-                        blog.thumbnail.data.attributes.url
+                        blog?.thumbnail?.data?.attributes?.url
                       }
                       viewCount={blog?.view_count || 0}
                     />

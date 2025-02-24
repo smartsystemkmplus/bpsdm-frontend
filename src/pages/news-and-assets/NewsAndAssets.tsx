@@ -100,7 +100,7 @@ export default function NewsAndAssets() {
                       content={blog.content}
                       createdAt={blog.createdAt}
                       thumbnailUrl={
-                        blog.thumbnail?.data?.attributes?.url
+                        blog?.thumbnail?.data?.attributes?.url
                       }
                       folder={
                         blog?.subFolder?.data?.attributes?.folder
