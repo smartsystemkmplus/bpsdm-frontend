@@ -1,5 +1,7 @@
 import ModalPortal from '@components/Modals/ModalPortal';
 import Providers from '@services/providers';
+import getAnonymousId from '@utils/getAnonymousId';
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 /**
@@ -12,6 +14,10 @@ import { Outlet } from 'react-router-dom';
  */
 
 function Layout() {
+  useEffect(() => {
+    getAnonymousId();
+  }, []);
+
   return (
     <Providers>
       <ModalPortal />
