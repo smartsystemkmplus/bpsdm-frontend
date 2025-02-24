@@ -27,7 +27,7 @@ ENV VITE_KMS_URL=https://km-bpsdm.jakarta.go.id/kms
 
 RUN pnpm build
 
-FROM nginx:stable-alpine AS server
+FROM public.ecr.aws/nginx/nginx:stable-alpine AS server
 COPY ./etc/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder ./app/dist /usr/share/nginx/html
 EXPOSE 80
