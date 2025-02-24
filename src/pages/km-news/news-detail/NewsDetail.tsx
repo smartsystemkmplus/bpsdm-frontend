@@ -14,6 +14,7 @@ import {
   SEARCH_ENGINE_ENDPOINT,
 } from '@services/api/endpoint';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
+import getAnonymousId from '@utils/getAnonymousId';
 import getPathWithSearchParams from '@utils/getPathWithSearchParams';
 import { useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
@@ -40,6 +41,9 @@ export default function NewsDetail({
       select: (res) => res?.data?.[0]?.attributes,
     },
     {
+      headers: {
+        'X-Anonymous-Id': getAnonymousId(),
+      },
       params: {
         slug,
         populate: 'deep',
