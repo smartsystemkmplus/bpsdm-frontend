@@ -51,8 +51,8 @@ export default function NewsAndAssets() {
       params: {
         populate: 'deep',
         sort: 'publishedAt:desc',
-        'pagination[page]': page,
-        'pagination[pageSize]': PAGE_SIZE,
+        page,
+        pageSize: PAGE_SIZE,
       },
     }
   );

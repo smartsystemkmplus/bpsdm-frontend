@@ -140,7 +140,8 @@ export default function useNetworks(service: string) {
     useInfiniteQuery<T, AxiosError, TSelect>({
       queryFn: async ({ pageParam = 1 }) => {
         const paginationParam =
-          service === BASE_PROXY.strapi
+          service === BASE_PROXY.strapi ||
+          service === BASE_PROXY.searchEngine
             ? { 'pagination[page]': pageParam }
             : { page: pageParam };
 
