@@ -87,9 +87,9 @@ export default function KMNews({
   const blogFilterParam = useMemo(() => {
     const params = { ...blogFolderParam };
     if (category === 'Berita KM') {
-      params['filters[category][name][$eq]'] = 'Berita KM';
+      params.categoryEq = 'Berita KM';
     } else {
-      params['filters[category][name][$ne]'] = 'Berita KM';
+      params.categoryNe = 'Berita KM';
     }
     return params;
   }, [blogFolderParam, category]);
@@ -139,7 +139,7 @@ export default function KMNews({
           params: {
             populate: 'deep',
             sort: 'publishedAt:desc',
-            'pagination[pageSize]': PAGE_SIZE,
+            pageSize: PAGE_SIZE,
             ...blogFilterParam,
           },
         }
