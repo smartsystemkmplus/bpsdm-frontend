@@ -95,7 +95,7 @@ export default function KMNews({
       ? JSON.stringify({ ...blogFolderParam })
       : null;
     return {
-      params,
+      ...params,
       subCategory,
     };
   }, [blogFolderParam, category]);
