@@ -25,7 +25,7 @@ import {
 import dayjs from 'dayjs';
 import { DataTable } from 'mantine-datatable';
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { Category, FolderAttribute } from './index.types';
 
@@ -52,6 +52,7 @@ interface KMNewsProps {
 export default function KMNews({
   category = 'Knowledge Center',
 }: KMNewsProps) {
+  const { pathname } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const paramFolderId = searchParams.get('f');
   const podcastId = searchParams.get('pod');
@@ -113,7 +114,12 @@ export default function KMNews({
       >(
         SEARCH_ENGINE_ENDPOINT.GET.blogs,
         {
-          queryKey: ['blogs-news', PAGE_SIZE, blogFilterParam],
+          queryKey: [
+            'blogs-news',
+            PAGE_SIZE,
+            blogFilterParam,
+            pathname,
+          ],
           enabled: !podcastId,
           initialPageParam: 1,
           getNextPageParam: (lastPage, allPages) => {
