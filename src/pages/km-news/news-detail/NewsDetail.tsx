@@ -55,7 +55,8 @@ export default function NewsDetail({
     () => [
       {
         title: category,
-        href: '/km-news',
+        href:
+          category === 'Berita KM' ? '/km-news' : '/knowledge-center',
       },
       {
         title: data?.title || '...',
