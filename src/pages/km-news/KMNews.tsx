@@ -85,13 +85,19 @@ export default function KMNews({
   }, [activeFolder]);
 
   const blogFilterParam = useMemo(() => {
-    const params = { ...blogFolderParam };
+    const params: Record<string, string> = {};
     if (category === 'Berita KM') {
       params.categoryEq = 'Berita KM';
     } else {
       params.categoryNe = 'Berita KM';
     }
-    return params;
+    const subCategory = Object.keys(blogFolderParam).length
+      ? JSON.stringify({ ...blogFolderParam })
+      : null;
+    return {
+      params,
+      subCategory,
+    };
   }, [blogFolderParam, category]);
 
   const { query } = useNetworks(BASE_PROXY.strapi);
