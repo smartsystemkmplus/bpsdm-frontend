@@ -1,6 +1,7 @@
 import Layout from '@components/Layouts';
 import CheckEmail from '@pages/check-email/CheckEmail';
 import ForgotPassword from '@pages/forgot-password/ForgotPassword';
+import Glossarium from '@pages/glossarium/Glossarium';
 import Home from '@pages/home/Home';
 import KMNews from '@pages/km-news/KMNews';
 import NewsDetail from '@pages/km-news/news-detail/NewsDetail';
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: '/terms-of-service',
         element: <TermsOfService />,
+      },
+      {
+        path: '/glossarium',
+        element: <Glossarium />,
       },
     ],
   },
