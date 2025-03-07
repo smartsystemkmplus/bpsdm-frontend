@@ -68,6 +68,12 @@ export default function Navbar() {
             KMS
           </a>
         )}
+        <Link
+          to="/glossarium"
+          className="font-semibold text-secondary-pressed"
+        >
+          Glossarium
+        </Link>
       </div>
 
       {isAuthenticated ? (
