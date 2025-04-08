@@ -168,9 +168,9 @@ export default function Glossarium() {
     {
       title: 'Istilah/Menu',
       accessor: 'istilah',
-      width: 300,
+      width: 350,
       render: (item: DataItem) => (
-        <Group gap="xs">
+        <Group gap="xs" wrap="nowrap">
           <img alt="arrow" src={GlosaArrow} className="size-[24px]" />
           <p>{item.istilah}</p>
         </Group>
