@@ -8,11 +8,13 @@ interface HomeLayoutProps {
   children: ReactNode;
   className?: string;
   withNavbar?: boolean;
+  footer?: ReactNode;
 }
 export default function HomeLayout({
   children,
   className,
   withNavbar = true,
+  footer,
 }: HomeLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col justify-between">
@@ -25,7 +27,7 @@ export default function HomeLayout({
       >
         {children}
       </section>
-      <Footer />
+      {footer || <Footer />}
     </div>
   );
 }
